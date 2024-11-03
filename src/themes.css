@@ -1,0 +1,16 @@
+/* themes.css */
+
+/* Define light theme colors */
+:root {
+    --background-color: #ffffff;
+    --text-color: #000000;
+    --overlay-color: rgba(119, 7, 240, 0.15); /* Light purple */
+  }
+  
+  /* Define dark theme colors */
+  [data-theme="dark"] {
+    --background-color: #1a1a1a;
+    --text-color: #ffffff;
+    --overlay-color: rgba(26, 3, 129, 0.15); /* Darker purple */
+  }
+  
