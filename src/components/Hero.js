@@ -1,5 +1,6 @@
 import React from 'react';
 import styled from 'styled-components';
+import { useNavigate } from 'react-router-dom';
 
 const HeroContainer = styled.section`
   display: flex;
@@ -63,6 +64,12 @@ const Button = styled.button`
 `;
 
 const Hero = () => {
+  const navigate = useNavigate(); // Initialize useNavigate
+
+  const handleUploadClick = () => {
+    navigate('/upload'); // Navigate to the UploadPage route ("/" in this case)
+  };
+
   return (
     <HeroContainer>
       <Title>Convert your sheet music into MIDI files</Title>
@@ -70,7 +77,7 @@ const Hero = () => {
         Convert sheet music into MIDI files with Midify. Upload an image, and our advanced machine learning technology
         will translate your notes into playable digital sound, perfect for composing, editing, and sharing your music.
       </Description>
-      <Button>UPLOAD SHEET MUSIC</Button>
+      <Button onClick={handleUploadClick}>UPLOAD SHEET MUSIC</Button>
     </HeroContainer>
   );
 };

@@ -1,17 +1,20 @@
 import React from 'react';
 import styled from 'styled-components';
 import '/Users/tnyamutswa/thesis/Midify Frontend/midify/src/themes.css';
+import AccountCircleOutlinedIcon from '@mui/icons-material/AccountCircleOutlined';
 
 
 const HeaderContainer = styled.header`
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 80px 150px;
+  position: relative; /* Enables absolute positioning for CenterLinks */
+  padding: 30px 150px;
   background-color: transparent;
-  // color: white;
   z-index: 2;
+
 `;
+
 
 const PurpleOverlay = styled.div`
   position: absolute;
@@ -24,56 +27,60 @@ const PurpleOverlay = styled.div`
 `;
 
 const Logo = styled.h1`
-  font-size: 1.5rem;
+  font-size: 3rem;
   font-weight: bold;
   cursor: pointer;
-  z-index: 2;
-`;
+    z-index: 2;
 
-// const NavLinks = styled.nav`
-//   display: flex;
-//   align-items: center;
-// `;
+`;
 
 const LeftLinks = styled.div`
   display: flex;
   align-items: center;
-  z-index: 2;
+  flex: 0.2; /* Pushes CenterLinks to the center */
+    z-index: 2;
+
+`;
+
+const CenterLinks = styled.div`
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  align-items: center;
+  font-size: 1.8rem;
+  gap: 50px; /* Space between each link */
+    z-index: 2;
+
 `;
 
 const RightLinks = styled.div`
   display: flex;
   align-items: center;
-  z-index: 2;
-  `;
+  flex: 0.05; /* Ensures RightLinks stay on the right */
+  justify-content: flex-end;
+    z-index: 2;
 
-  const Link = styled.a`
+`;
+
+const Link = styled.a`
   color: white;
   text-decoration: none;
-  font-weight: 500;
-  margin-right: 50px; /* Adds spacing between each link */
+  font-weight: 500;  
   z-index: 2;
-  &:last-child {
-    margin-right: 0; /* Removes margin after the last link */
-  }
 
+  
   &:hover {
     color: #ddd;
   }
 `;
 
-const ProfileIcon = styled.div`
-  width: 35px;
-  height: 35px;
-  background-color: #2680eb;
-  border-radius: 50%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 1.2rem;
-  color: white;
+const ProfileIcon = styled(AccountCircleOutlinedIcon)`
+  font-size: 3rem !important;
   cursor: pointer;
-  z-index: 2;
+  color: white;
+    z-index: 2;
+
 `;
 
 
@@ -81,15 +88,21 @@ const LoggedInHeader = () => {
   return (
     <HeaderContainer>
       <PurpleOverlay />
-      <Logo>Midify</Logo>
-        <LeftLinks>
-          <Link href="#home">Home</Link>
-          <Link href='#history'>History</Link>
-          <Link href="#about">About</Link>
-        </LeftLinks>
-        <RightLinks>
-        <ProfileIcon>👤</ProfileIcon> 
-        </RightLinks>
+      <LeftLinks>
+        <Logo>Midify</Logo>
+      </LeftLinks>
+      
+      <CenterLinks>
+        <Link href="/home">Home</Link>
+        <Link href='/history'>History</Link>
+        <Link href="/about">About</Link>
+      </CenterLinks>
+
+      <RightLinks>
+        <Link href="/profile">
+          <ProfileIcon />
+        </Link>
+      </RightLinks>
     </HeaderContainer>
   );
 };
