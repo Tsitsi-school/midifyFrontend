@@ -1,7 +1,7 @@
 import React from 'react';
 import styled from 'styled-components';
-import Hero from './Hero';
-import LoggedInHeader from './LoggedInHeader';
+import Hero from '../common/Hero';
+import LoggedInHeader from '../Headers/LoggedInHeader';
 
 // Container with fullscreen background
 const FullscreenContainer = styled.div`

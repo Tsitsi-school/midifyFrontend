@@ -21,7 +21,7 @@ const Title = styled.h1`
   font-weight: bold;
   color: var(--title-color);
   text-align: center;
-  margin: 20px 0;
+  // margin: 20px 0;
 `;
 
 const DownloadContainer = styled.div`

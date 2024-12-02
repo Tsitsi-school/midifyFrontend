@@ -1,6 +1,6 @@
 import React from 'react';
 import styled from 'styled-components';
-import Header from './pageHeader'; // Assuming you're using a header component for navigation
+import Header from '../Headers/pageHeader'; // Assuming you're using a header component for navigation
 
 const PageContainer = styled.div`
   background-color: var(--background-color);

@@ -1,5 +1,7 @@
-import React, {useState, useEffect} from 'react';
+import React from 'react';
 import styled from 'styled-components';
+import { Link } from 'react-router-dom';
+import '/Users/tnyamutswa/thesis/Midify Frontend/midify/src/themes.css';
 import AccountCircleOutlinedIcon from '@mui/icons-material/AccountCircleOutlined';
 
 
@@ -36,8 +38,8 @@ const Logo = styled.h1`
 const LeftLinks = styled.div`
   display: flex;
   align-items: center;
-  flex: 0.2;
-  z-index: 2;
+  flex: 0.2; /* Pushes CenterLinks to the center */
+    z-index: 2;
 
 `;
 
@@ -54,78 +56,54 @@ const CenterLinks = styled.div`
 `;
 
 const RightLinks = styled.div`
-  diplay: flex;
+  display: flex;
   align-items: center;
+  flex: 0.05; /* Ensures RightLinks stay on the right */
   justify-content: flex-end;
-  z-index: 2;
-  flex: 0.2;
+    z-index: 2;
 
 `;
 
-const Link = styled.a`
+const StyledLink = styled(Link)`
   color: white;
   text-decoration: none;
-  font-weight: 500;  
+  font-weight: 500;
   z-index: 2;
-  font-size: 1.8rem;
 
-
-  
   &:hover {
     color: #ddd;
   }
 `;
-
-const LoginLink = styled.a`
-  color: white;
-  text-decoration: none;
-  font-weight: 500;  
-  z-index: 2;
-  padding: 10px;
-  font-size: 1.8rem;
-
-
-  
-  &:hover {
-    color: #ddd;
-  }
-`;
-
-const Button = styled.button`
-  padding: 10px 20px;
-  color: white;
-  background-color: #3795BD;
-  border: none;
-  border-radius: 4px;
+const ProfileIcon = styled(AccountCircleOutlinedIcon)`
+  font-size: 3rem !important;
   cursor: pointer;
-  font-size: 1.8rem;
-
-  &:hover {
-    background-color: #1a5cad;
-  }
+  color: white;
+    z-index: 2;
 
 `;
 
-const DefaultHeader = () => {
 
+const LoggedInHeader = () => {
   return (
     <HeaderContainer>
       <PurpleOverlay />
-        <LeftLinks>
-          <Logo>Midify</Logo>
-        </LeftLinks>
+      <LeftLinks>
+        <Logo>Midify</Logo>
+      </LeftLinks>
+      
+      <CenterLinks>
+        <StyledLink to="/home">Home</StyledLink>
+        <StyledLink to='/history'>History</StyledLink>
+        <StyledLink to="/about">About</StyledLink>
+      </CenterLinks>
 
-        <CenterLinks>
-          <Link href="/home">Home</Link>
-          <Link href="/about">About</Link>
-        </CenterLinks>
-
-        <RightLinks>
-          <LoginLink href="/login">Login</LoginLink>
-          <Button>Sign Up</Button>
-        </RightLinks>
+      <RightLinks>
+        <StyledLink to="/profile">
+          <ProfileIcon />
+        </StyledLink>
+      </RightLinks>
     </HeaderContainer>
   );
 };
 
-export default DefaultHeader;
+export default LoggedInHeader;

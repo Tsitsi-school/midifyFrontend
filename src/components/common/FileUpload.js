@@ -3,6 +3,8 @@ import { useDropzone } from 'react-dropzone';
 import styled from 'styled-components';
 import UploadFileOutlinedIcon from '@mui/icons-material/UploadFileOutlined';
 import { UpdateDisabledOutlined } from '@mui/icons-material';
+import { apiClient } from '../../api/midifyApi'; // Use the central API client
+
 
 const UploadContainer = styled.div`
   border: 5px dashed var(--upload-border-color);
@@ -78,11 +80,13 @@ const ButtonText = styled.span`
 
 const FileUpload = ({ onDrop }) => {
   const handleDrop = useCallback((acceptedFiles) => {
+    console.log("a file has been dropped");
     onDrop(acceptedFiles);
   }, [onDrop]);
 
   const { getRootProps, getInputProps } = useDropzone({
     onDrop: handleDrop,
+    multiple:false,
   });
 
   return (

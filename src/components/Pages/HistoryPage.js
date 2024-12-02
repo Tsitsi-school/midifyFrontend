@@ -1,8 +1,12 @@
 import React from 'react';
 import styled from 'styled-components';
+import { useEffect, useState } from 'react';
+
 import InsertDriveFileOutlinedIcon from '@mui/icons-material/InsertDriveFileOutlined';
 import FileDownloadOutlinedIcon from '@mui/icons-material/FileDownloadOutlined';
-import Header from './pageHeader';
+import Header from '../Headers/pageHeader';
+import { fetchUploadHistory } from '../../api/midifyApi';
+import { format } from 'date-fns';
 
 const PageContainer = styled.div`
   background-color: var(--history-background-color);
@@ -23,38 +27,11 @@ const Title = styled.h1`
   margin: 40px;
 `;
 
-// const HistoryList = styled.div`
-//   width: 100%;
-//   max-width: 100%;
-// //   background-color: var(--history-item-color);
-//   background-color: green;
-//   border-radius: 2px;
-//   overflow: hidden;
-//   box-shadow: 0px 4px 12px rgba(0, 0, 0, 0.1);
-//   margin-bottom: 15px; /* Adds space between items */
-
-    
-
-// `;
-
 const HistoryList = styled.div`
   width: 100%;
   max-width: 100%; /* Limit the width of the list */
 `;
 
-// const HistoryItem = styled.div`
-//   display: flex;
-//   align-items: center;
-//   justify-content: space-between;
-//   padding: 20px;
-//   background-color: #fff; /* Background color for each item */
-//   border-radius: 2px; /* Rounds corners for each item */
-//   box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1); /* Optional: adds a subtle shadow */
-
-//   &:last-child {
-//     margin-bottom: 0; /* Removes margin after the last item */
-//   }
-// `;
 
 const HistoryItem = styled.div`
   display: flex;
@@ -120,41 +97,66 @@ const DownloadButton = styled.button`
   }
 `;
 
+
 const HistoryPage = () => {
-  // Sample data for history items
-  const historyItems = [
-    { id: 1, name: 'Sheet_Music_1.mid', date: '12 Aug 2024' },
-    { id: 2, name: 'Sheet_Music_2.mid', date: '31 Aug 2024' },
-    { id: 3, name: 'Sheet_Music_3.mid', date: '8 Sept 2024' },
-    { id: 4, name: 'Sheet_Music_4.mid', date: '21 Sept 2024' },
-  ];
+  const [historyItems, setHistoryItems] = useState([]);
+  const [error, setError] = useState(null);
+
+  useEffect(() => {
+    const fetchHistory = async () => {
+      try {
+        const data = await fetchUploadHistory(); // Fetch history from API
+        setHistoryItems(data); // Update state with fetched data
+      } catch (error) {
+        setError('Failed to fetch upload history.');
+        console.error('Error fetching upload history:', error);
+      }
+    };
+    fetchHistory();
+  }, []);
 
   const handleDownload = (fileName) => {
     alert(`Downloading ${fileName}`);
-    // Implement actual download logic here
+    // Implement download logic (e.g., download from a file URL provided in API response)
   };
+
+  const formatFileName = (name) => {
+    return name.startsWith('upload/') ? name.replace('upload/', '') : name;
+  };
+
+  const formatDate = (date) => {
+    try {
+      return format(new Date(date), 'MMMM dd, yyyy hh:mm a'); // Example: "November 30, 2024 02:30 PM"
+    } catch (error) {
+      console.error('Invalid date format:', date);
+      return 'Invalid Date';
+    }
+  };
+
+  if (error) return <p style={{ color: 'red' }}>{error}</p>;
+  if (!historyItems.length) return <p>No upload history available.</p>;
 
   return (
     <div>
-    <Header />
-        <PageContainer>
+      <Header />
+      <PageContainer>
         <Title>History</Title>
         <HistoryList>
-            {historyItems.map((item) => (
+          {historyItems.map((item) => (
             <HistoryItem key={item.id}>
-                <FileInfo>
-                    <InsertDriveFileOutlinedIcon />
-                <FileName>{item.name}</FileName>
-                </FileInfo>
-                <FileDate>{item.date}</FileDate>
-                <DownloadButton onClick={() => handleDownload(item.name)}>
+              <FileInfo>
+                <InsertDriveFileOutlinedIcon />
+                <FileName>{formatFileName(item.name) || 'Unnamed File'}</FileName>
+              </FileInfo>
+              <FileDate>{formatDate(item.date) || 'Unknown Date'}</FileDate>
+              <DownloadButton onClick={() => handleDownload(item.name)}>
                 Download
                 <FileDownloadOutlinedIcon />
-                </DownloadButton>
+              </DownloadButton>
             </HistoryItem>
-            ))}
+          ))}
         </HistoryList>
-        </PageContainer>
+      </PageContainer>
     </div>
   );
 };

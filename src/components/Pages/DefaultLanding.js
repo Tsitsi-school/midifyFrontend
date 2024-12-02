@@ -1,7 +1,7 @@
 import React from 'react';
 import styled from 'styled-components';
-import DefaultHeader from './DefaultHeader';
-import Hero from './Hero';
+import DefaultHeader from '../Headers/DefaultHeader';
+import Hero from '../common/Hero';
 
 const FullscreenContainer = styled.div`
   height: 100vh; /* Full screen height */

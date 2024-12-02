@@ -1,6 +1,8 @@
 import React from 'react';
 import styled from 'styled-components';
 import InsertDriveFileOutlinedIcon from '@mui/icons-material/InsertDriveFileOutlined';
+import { deleteUpload } from '../../api/midifyApi';
+
 
 const FileContainer = styled.div`
   display: flex;
@@ -34,14 +36,31 @@ const FileSize = styled.span`
   color: var(--file-info-color);
 `;
 
-const UploadList = ({ files }) => {
-  return files.map((file) => (
-    <FileContainer key={file.name}>
+const DeleteButton = styled.button`
+  padding: 5px 10px;
+  background-color: red;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  font-size: 0.8rem;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+
+  &:hover {
+    background-color: darkred;
+  }
+`;
+
+const UploadList = ({ files, setUploadedFiles }) => {
+  return files.map((file, index) => (
+    <FileContainer key={file.id || index}> {/* Use file.id if available, fallback to index */}
       <FileInfo>
         <FileIcon />
         <FileName>{file.name}</FileName>
       </FileInfo>
       <FileSize>{(file.size / 1024).toFixed(2)} KB</FileSize>
+      {/* Uncomment if delete functionality is needed */}
+      {/* <DeleteButton onClick={() => handleDelete(file.id)}>Delete</DeleteButton> */}
     </FileContainer>
   ));
 };

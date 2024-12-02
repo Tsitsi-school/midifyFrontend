@@ -1,6 +1,7 @@
 import React from 'react';
 import styled from 'styled-components';
 import AccountCircleOutlinedIcon from '@mui/icons-material/AccountCircleOutlined';
+import { Link } from 'react-router-dom';
 
 const HeaderContainer = styled.header`
   display: flex;
@@ -41,11 +42,12 @@ const RightLinks = styled.div`
   justify-content: flex-end;
 `;
 
-const Link = styled.a`
+const StyledLink = styled(Link)`
   color: white;
   text-decoration: none;
   font-weight: 500;
-  
+  z-index: 2;
+
   &:hover {
     color: #ddd;
   }
@@ -65,15 +67,15 @@ const PageHeader = () => {
     </LeftLinks>
     
     <CenterLinks>
-      <Link href="/home">Home</Link>
-      <Link href="/history">History</Link>
-      <Link href="/about">About</Link>
+      <StyledLink to="/home">Home</StyledLink>
+      <StyledLink to="/history">History</StyledLink>
+      <StyledLink to="/about">About</StyledLink>
     </CenterLinks>
     
     <RightLinks>
-      <Link href="/profile">
+      <StyledLink to="/profile">
         <ProfileIcon />
-      </Link>
+      </StyledLink>
     </RightLinks>
   </HeaderContainer>
   );
