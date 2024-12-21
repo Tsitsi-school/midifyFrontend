@@ -1,14 +1,12 @@
-import React, { useEffect, useState } from 'react';
-import Header from '../Headers/pageHeader.js';
-import FileUpload from '../common/FileUpload.js';
-import UploadList from '../common/UploadList.js';
-import Description from '../common/Description.js';
-import styled from 'styled-components';
-import LoadingPage from './LoadingPage.js';
-import DownloadPage from './DownloadPage.js';
-import uploadFile from '../../api/midifyApi.js';
-import apiClient from '../../api/midifyApi.js';
- 
+import React, { useEffect, useState } from "react";
+import Header from "../Headers/pageHeader.js";
+import FileUpload from "../common/FileUpload.js";
+import UploadList from "../common/UploadList.js";
+import Description from "../common/Description.js";
+import styled from "styled-components";
+import LoadingPage from "./LoadingPage.js";
+import DownloadPage from "./DownloadPage.js";
+import apiClient from "../../api/midifyApi.js";
 
 const PageContainer = styled.div`
   background-color: var(--background-color);
@@ -50,6 +48,7 @@ const UploadPage = () => {
   const [isConverting, setIsConverting] = useState(false);
   const [conversionComplete, setConversionComplete] = useState(false);
   const [isUploading, setIsUploading] = useState(false);
+  const [fileID, setFileID] = useState(0);
 
   // // Simulate fetching uploads from "local storage"
   // useEffect(() => {
@@ -63,69 +62,104 @@ const UploadPage = () => {
   // //     return;
   // //   }
 
-
-
   const handleFileDrop = async (files) => {
     if (!files || files.length === 0) {
-      console.error('No files provided.');
+      console.error("No files provided.");
       return;
     }
     console.log("I can't believe I'm here");
-  
+
     const file = files[0];
     const formData = new FormData();
-    formData.append('file', file);
-  
+    formData.append("file", file);
+
     try {
       setIsUploading(true);
-      const token = localStorage.getItem('authToken'); // Retrieve the token
+      const token = localStorage.getItem("authToken"); // Retrieve the token
       console.log(token);
-      const response = await apiClient.post('/upload/', formData, {
+      const response = await apiClient.post("/upload/", formData, {
         headers: {
-          'Content-Type': 'multipart/form-data',
+          "Content-Type": "multipart/form-data",
           // ...(token && { Authorization: `Token ${token}` }), // Include token only if it exists
         },
       });
-      console.log('File uploaded successfully:', response.data);
+      console.log("File uploaded successfully:", response.data);
       const uploadedFile = {
         ...response.data, // File data from the backend
         name: file.name,
-        size: file.size,  // Size in bytes from the file object
+        size: file.size,
       };
+      console.log("Uploaded file data ", uploadedFile);
+      setFileID(uploadedFile.id);
       setUploadedFiles((prevFiles) => [...prevFiles, uploadedFile]);
     } catch (error) {
-      console.error('Error uploading file:', error.response?.data || error.message);
+      console.error(
+        "Error uploading file:",
+        error.response?.data || error.message
+      );
     } finally {
       setIsUploading(false);
     }
   };
-  
+
   const onFileChange = (files) => {
     console.log("[Upload Page] Handling file change...");
     handleFileDrop(files);
   };
 
-
-  const handleConvert = () => {
+  const handleConvert = async () => {
     setIsConverting(true);
     setConversionComplete(false);
 
-    // Simulate a conversion delay
-    setTimeout(() => {
-      setIsConverting(false);
+    try {
+      const token = localStorage.getItem("authToken"); // Retrieve the token
+      const response = await apiClient.post(
+        `/upload/${fileID}/convert/`,
+        null,
+        {
+          headers: {
+            ...(token && { Authorization: `Token ${token}` }),
+          },
+        }
+      );
+
+      console.log("Conversion initiated:", response.data);
+      // Optionally, poll for status or wait for a response indicating completion.
       setConversionComplete(true);
-    }, 3000); // 3 seconds delay
+    } catch (error) {
+      console.error(
+        "Error during conversion:",
+        error.response?.data || error.message
+      );
+    } finally {
+      setIsConverting(false);
+    }
   };
 
-  const handleDownload = () => {
-    alert('Download started!');
-    // Implement a mock download (e.g., create a dummy file and download it)
-    const fileName = uploadedFiles[0]?.name.replace(/\.\w+$/, '.mid');
-    const blob = new Blob(['MIDI content'], { type: 'audio/midi' });
-    const link = document.createElement('a');
-    link.href = URL.createObjectURL(blob);
-    link.download = fileName || 'file.mid';
-    link.click();
+  const handleDownload = async () => {
+    try {
+      const token = localStorage.getItem("authToken"); // Retrieve the token for authentication
+      const response = await apiClient.get(`/upload/${fileID}/download/`, {
+        responseType: "blob", // Handle binary file data
+        headers: {
+          ...(token && { Authorization: `Token ${token}` }), // Include token if available
+        },
+      });
+
+      // Process the downloaded file
+      const blob = new Blob([response.data], { type: "audio/midi" });
+      const link = document.createElement("a");
+      link.href = URL.createObjectURL(blob);
+      link.download = `converted_file_${fileID}.mid`; // Provide a filename for the download
+      link.click(); // Trigger the download
+    } catch (error) {
+      // Handle errors
+      console.error(
+        "Error during file download:",
+        error.response?.data || error.message
+      );
+      alert("Failed to download the file. Please try again.");
+    }
   };
 
   return (
@@ -149,7 +183,7 @@ const UploadPage = () => {
         )}
         {conversionComplete && (
           <DownloadPage
-            fileName={uploadedFiles[0]?.name.replace(/\.\w+$/, '.mid')}
+            fileName={uploadedFiles[0]?.name.replace(/\.\w+$/, ".mid")}
             onDownload={handleDownload}
           />
         )}
@@ -159,8 +193,6 @@ const UploadPage = () => {
 };
 
 export default UploadPage;
-
-
 
 // import React, { useEffect, useState } from 'react';
 // import Header from '../Headers/pageHeader.js';
@@ -173,8 +205,6 @@ export default UploadPage;
 
 // // import { fetchUploads, uploadFile } from '../../api/midifyApi.js';
 
-
-
 // const PageContainer = styled.div`
 //   background-color: var(--background-color);
 //   color: var(--text-color);
@@ -183,7 +213,6 @@ export default UploadPage;
 //   align-items: center;
 //   justify-content: center;
 // `;
-
 
 // const CenteredContent = styled.div`
 // //   display: flex;
@@ -194,7 +223,6 @@ export default UploadPage;
 // //   max-width: 800px; /* Control the maximum width of the centered content */
 // //   text-align: center;
 // `;
-
 
 // const ConvertButton = styled.button`
 //   padding: 12px 25px;
@@ -221,7 +249,6 @@ export default UploadPage;
 
 // `;
 
-
 // const UploadPage = () => {
 //   const [uploadedFiles, setUploadedFiles] = useState([]);
 //   const [isConverting, setIsConverting] = useState(false);
@@ -247,30 +274,28 @@ export default UploadPage;
 //         console.error('No files provided.');
 //         return;
 //       }
-  
+
 //       let file = files[0]; // Get the first file
-  
+
 //       // Check if the object is a valid File instance
 //       if (!(file instanceof File)) {
 //         console.warn('Converting to a valid File object...');
 //         file = new File([file], file.name, { type: file.type });
 //       }
-  
+
 //       console.log('File object after conversion:', file);
 //       console.log('Is instance of File:', file instanceof File); // Should now return true
-  
+
 //       const response = await uploadFile(file); // Call API function to upload the file
 //       console.log('File uploaded successfully:', response);
-  
+
 //       // Update the state with the uploaded file data from the backend
 //       setUploadedFiles((prevFiles) => [...prevFiles, response]);
 //     } catch (error) {
 //       console.error('File upload failed:', error);
 //     }
 //   };
-  
-  
-  
+
 //   const handleConvert = () => {
 //     setIsConverting(true);
 //     setConversionComplete(false);
@@ -286,7 +311,6 @@ export default UploadPage;
 //     alert("Download started!");
 //     // Implement download logic here
 //   };
-
 
 //   return (
 //     <div>
@@ -337,5 +361,3 @@ export default UploadPage;
 // };
 
 // export default UploadPage;
-
-

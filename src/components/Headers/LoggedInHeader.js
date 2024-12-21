@@ -1,9 +1,8 @@
-import React from 'react';
-import styled from 'styled-components';
-import { Link } from 'react-router-dom';
-import '/Users/tnyamutswa/thesis/Midify Frontend/midify/src/themes.css';
-import AccountCircleOutlinedIcon from '@mui/icons-material/AccountCircleOutlined';
-
+import React from "react";
+import styled from "styled-components";
+import { Link } from "react-router-dom";
+import "../../themes.css";
+import AccountCircleOutlinedIcon from "@mui/icons-material/AccountCircleOutlined";
 
 const HeaderContainer = styled.header`
   display: flex;
@@ -13,9 +12,7 @@ const HeaderContainer = styled.header`
   padding: 30px 150px;
   background-color: transparent;
   z-index: 2;
-
 `;
-
 
 const PurpleOverlay = styled.div`
   position: absolute;
@@ -31,16 +28,14 @@ const Logo = styled.h1`
   font-size: 3rem;
   font-weight: bold;
   cursor: pointer;
-    z-index: 2;
-
+  z-index: 2;
 `;
 
 const LeftLinks = styled.div`
   display: flex;
   align-items: center;
   flex: 0.2; /* Pushes CenterLinks to the center */
-    z-index: 2;
-
+  z-index: 2;
 `;
 
 const CenterLinks = styled.div`
@@ -51,8 +46,7 @@ const CenterLinks = styled.div`
   align-items: center;
   font-size: 1.8rem;
   gap: 50px; /* Space between each link */
-    z-index: 2;
-
+  z-index: 2;
 `;
 
 const RightLinks = styled.div`
@@ -60,8 +54,7 @@ const RightLinks = styled.div`
   align-items: center;
   flex: 0.05; /* Ensures RightLinks stay on the right */
   justify-content: flex-end;
-    z-index: 2;
-
+  z-index: 2;
 `;
 
 const StyledLink = styled(Link)`
@@ -78,10 +71,8 @@ const ProfileIcon = styled(AccountCircleOutlinedIcon)`
   font-size: 3rem !important;
   cursor: pointer;
   color: white;
-    z-index: 2;
-
+  z-index: 2;
 `;
-
 
 const LoggedInHeader = () => {
   return (
@@ -90,10 +81,10 @@ const LoggedInHeader = () => {
       <LeftLinks>
         <Logo>Midify</Logo>
       </LeftLinks>
-      
+
       <CenterLinks>
         <StyledLink to="/home">Home</StyledLink>
-        <StyledLink to='/history'>History</StyledLink>
+        <StyledLink to="/history">History</StyledLink>
         <StyledLink to="/about">About</StyledLink>
       </CenterLinks>
 
