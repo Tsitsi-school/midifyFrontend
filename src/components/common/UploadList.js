@@ -1,7 +1,6 @@
 import React from 'react';
 import styled from 'styled-components';
 import InsertDriveFileOutlinedIcon from '@mui/icons-material/InsertDriveFileOutlined';
-import { deleteUpload } from '../../api/midifyApi';
 
 
 const FileContainer = styled.div`
@@ -36,20 +35,20 @@ const FileSize = styled.span`
   color: var(--file-info-color);
 `;
 
-const DeleteButton = styled.button`
-  padding: 5px 10px;
-  background-color: red;
-  color: white;
-  border: none;
-  border-radius: 4px;
-  font-size: 0.8rem;
-  cursor: pointer;
-  transition: background-color 0.3s ease;
-
-  &:hover {
-    background-color: darkred;
-  }
-`;
+// const DeleteButton = styled.button`
+//   padding: 5px 10px;
+//   background-color: red;
+//   color: white;
+//   border: none;
+//   border-radius: 4px;
+//   font-size: 0.8rem;
+//   cursor: pointer;
+//   transition: background-color 0.3s ease;
+//
+//   &:hover {
+//     background-color: darkred;
+//   }
+// `;
 
 const UploadList = ({ files, setUploadedFiles }) => {
   return files.map((file, index) => (

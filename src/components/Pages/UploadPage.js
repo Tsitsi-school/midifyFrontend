@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import Header from "../Headers/pageHeader.js";
 import FileUpload from "../common/FileUpload.js";
 import UploadList from "../common/UploadList.js";

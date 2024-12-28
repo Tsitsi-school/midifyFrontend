@@ -2,8 +2,7 @@ import React, { useCallback } from 'react';
 import { useDropzone } from 'react-dropzone';
 import styled from 'styled-components';
 import UploadFileOutlinedIcon from '@mui/icons-material/UploadFileOutlined';
-import { UpdateDisabledOutlined } from '@mui/icons-material';
-import { apiClient } from '../../api/midifyApi'; // Use the central API client
+// import { apiClient } from '../../api/midifyApi'; // Use the central API client
 
 
 const UploadContainer = styled.div`
