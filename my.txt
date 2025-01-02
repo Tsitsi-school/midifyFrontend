@@ -1,34 +1,81 @@
-const handleFileDrop = async (files) => {
-  if (!files || files.length === 0) {
-    console.error('No files provided.');
-    return;
+header {
+  flex: 0 0 auto; /* Header takes as much space as it needs */
+  z-index: 1000;
+  width: 100%;
+  height: auto; /* Allow height to adjust dynamically */
+  padding: 15px 5%; /* Use percentages for padding to scale with the window */
+  background: linear-gradient(90deg, #4e31aa 0%, #3795bd 50%, #4e31aa 100%);
+  color: white;
+  box-sizing: border-box;
+}
+
+.header-container {
+  opacity: 0.9; /* Slight transparency */
+}
+
+.page-content {
+  padding-top: 120px; /* Add enough padding for the header height */
+  flex: 1 1 auto;
+  overflow-y: auto;
+}
+
+.logo {
+  font-size: 2rem;
+  font-weight: bold;
+  cursor: pointer;
+}
+
+.center-links {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 3rem; /* Space between links */
+  font-size: 1.8rem;
+}
+
+.right-links {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+}
+
+.styled-link {
+  text-decoration: none;
+  color: white;
+}
+
+.styled-link:hover {
+  color: #ddd;
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+  header {
+    padding: 10px 5%;
+    flex-direction: column;
   }
 
-  const file = files[0];
-  const formData = new FormData();
-  formData.append('file', file);
-  formData.append('name', file.name); // Add name field
-  formData.append('date', new Date().toISOString()); // Add date field (ISO format)
-
-  try {
-    setIsUploading(true);
-    const token = localStorage.getItem('authToken'); // Retrieve the token
-    const response = await apiClient.post('/upload/', formData, {
-      headers: {
-        'Content-Type': 'multipart/form-data',
-        ...(token && { Authorization: `Token ${token}` }), // Include token only if it exists
-      },
-    });
-    console.log('File uploaded successfully:', response.data);
-    const uploadedFile = {
-      ...response.data, // File data from the backend
-      name: file.name,
-      size: file.size,  // Size in bytes from the file object
-    };
-    setUploadedFiles((prevFiles) => [...prevFiles, uploadedFile]);
-  } catch (error) {
-    console.error('Error uploading file:', error.response?.data || error.message);
-  } finally {
-    setIsUploading(false);
+  .center-links {
+    font-size: 1.5rem;
+    gap: 1.5rem;
   }
-};
+
+  .logo {
+    font-size: 1.5rem;
+  }
+}
+
+@media (max-width: 480px) {
+  header {
+    padding: 8px 5%;
+  }
+
+  .logo {
+    font-size: 1.2rem;
+  }
+
+  .center-links {
+    font-size: 1rem;
+    gap: 1rem;
+  }
+}

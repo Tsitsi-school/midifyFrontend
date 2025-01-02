@@ -73,7 +73,7 @@ function App() {
             isLoggedIn ? (
               <Navigate to="/home" /> // Redirect to home if logged in
             ) : (
-              <DefaultLanding />
+              <Navigate to="/login" />
             )
           }
         />

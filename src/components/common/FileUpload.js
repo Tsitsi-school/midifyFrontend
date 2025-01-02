@@ -17,18 +17,6 @@ const UploadContainer = styled.div`
   margin-top: 10px;
 `;
 
-// const UploadContainer = styled.div`
-//   width: 80%;
-//   max-width: 900px;
-//   padding: 40px;
-//   border: 2px dashed #ccc;
-//   text-align: center;
-//   border-radius: 8px;
-//   color: #333;
-//   background-color: #ffffff;
-//   box-shadow: 0px 4px 12px rgba(0, 0, 0, 0.1);
-//   margin-top: 20px;
-// `;
 
 const UploadButton = styled.button`
   //display: flex;

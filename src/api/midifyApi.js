@@ -82,11 +82,26 @@ export const fetchUploadHistory = async () => {
       throw error.response?.data || error.message; // Re-throw error for the caller to handle
     }
   };
+
+export const fetchImage = async (uploadId) => {
+    try {
+      const response = await apiClient.get(`/history/${uploadId}/`, {
+        responseType: 'blob', // Fetch the response as binary data
+      });
+      console.log('Upload History Response:', response.data); // Debug API response
+
+      return response.data; // Return the data to be used in the component
+    } catch (error) {
+      console.error('Error fetching image from history:', error.response?.data || error.message);
+      throw error.response?.data || error.message; // Re-throw error for the caller to handle
+    }
+  };
   
   
 export const fetchProfile = async () => {
     try {
       const response = await apiClient.get('/profile/');
+      console.log(response.data);
       return response.data;
     } catch (error) {
       console.error('Error fetching profile:', error.response?.data || error.message);
