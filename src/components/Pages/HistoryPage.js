@@ -114,7 +114,7 @@ import React, { useEffect, useState } from 'react';
 import InsertDriveFileOutlinedIcon from '@mui/icons-material/InsertDriveFileOutlined';
 import FileDownloadOutlinedIcon from '@mui/icons-material/FileDownloadOutlined';
 import Header from '../Headers/pageHeader';
-import { fetchImage, fetchUploadHistory } from '../../api/midifyApi';
+import { fetchImage, fetchMIDI, fetchUploadHistory } from '../../api/midifyApi';
 import { format } from 'date-fns';
 import Layout from '../common/Layout';
 import { useNavigate } from 'react-router-dom';
@@ -137,9 +137,23 @@ const HistoryPage = () => {
     fetchHistory();
   }, []);
 
-  const handleMIDIDownload = (fileName) => {
-        alert(`Mocking Midi Download ${fileName}`);
-        // Implement download logic (e.g., download from a file URL provided in API response)
+  const handleMIDIDownload = async (uploadId) => {
+        // alert(`Mocking Midi Download ${fileName}`);
+      try {
+        // Fetch the image file from the server
+        const blob = await fetchMIDI(uploadId);
+    
+        // Trigger the download
+        const link = document.createElement('a');
+        link.href = window.URL.createObjectURL(blob); // Create a URL from the blob
+        link.download = `midi_${uploadId}.mid`; // Provide a custom filename
+        link.click();
+    
+        console.log(`MIDI file with ID ${uploadId} downloaded successfully.`);
+      } catch (error) {
+        console.error(`Error downloading midi with ID ${uploadId}:`, error.message);
+        alert('Failed to download the midi. Please try again.');
+      }  
   };
 
   const handleImageDownload = async (uploadId) => {
@@ -204,7 +218,7 @@ const HistoryPage = () => {
                   <span className="history-file-date">{formatDate(item.date) || 'Unknown Date'}</span>
                 <button
                   className="history-download-button"
-                  onClick={() => handleMIDIDownload(`${item.name}.mid`)} 
+                  onClick={() => handleMIDIDownload(item.id)} 
                 >
                   Download MIDI
                   <FileDownloadOutlinedIcon />

@@ -17,6 +17,8 @@ const UploadPage = () => {
   const [conversionProgress, setConversionProgress] = useState(0); // Track conversion progress
   const [isUploading, setIsUploading] = useState(false);
   const [previewUrl, setPreviewUrl] = useState(null); // State for image preview URL
+  const [fileID, setFileID] = useState(0);
+  const [midiFileBlob, setMidiFileBlob] = useState(null); // Add this state
 
 
   // // Simulate fetching uploads from "local storage"
@@ -60,6 +62,7 @@ const UploadPage = () => {
         name: file.name,
         size: file.size,  // Size in bytes from the file object
       };
+      setFileID(uploadedFile.id);
       setUploadedFiles((prevFiles) => [...prevFiles, uploadedFile]);
     } catch (error) {
       console.error('Error uploading file:', error.response?.data || error.message);
@@ -74,33 +77,136 @@ const UploadPage = () => {
   };
 
 
-  const handleConvert = () => {
+  // const handleConvert = () => {
+  //   setIsConverting(true);
+  //   setConversionComplete(false);
+  //   setConversionProgress(0);
+
+  //   const interval = setInterval(() => {
+  //     setConversionProgress((prevProgress) => {
+  //       if (prevProgress >= 100) {
+  //         clearInterval(interval);
+  //         setIsConverting(false);
+  //         setConversionComplete(true);
+  //         return 100;
+  //       }
+  //       return prevProgress + 10; // Increment progress by 10%
+  //     });
+  //   }, 500); // Update progress every 500ms
+  // };
+
+  // const handleConvert = async () => {
+  //   setIsConverting(true);
+  //   setConversionComplete(false);
+
+  //   try {
+  //     const token = localStorage.getItem("authToken"); // Retrieve the token
+  //     const response = await apiClient.post(
+  //       `/upload/${fileID}/convert/`,
+  //       null,
+  //       {
+  //         headers: {
+  //           ...(token && { Authorization: `Token ${token}` }),
+  //         },
+  //       }
+  //     );
+
+  //     console.log("Conversion initiated:", response.data);
+  //     // Optionally, poll for status or wait for a response indicating completion.
+  //     setConversionComplete(true);
+  //   } catch (error) {
+  //     console.error(
+  //       "Error during conversion:",
+  //       error.response?.data || error.message
+  //     );
+  //   } finally {
+  //     setIsConverting(false);
+  //   }
+  // };
+
+  const handleConvert = async () => {
     setIsConverting(true);
     setConversionComplete(false);
     setConversionProgress(0);
-
-    const interval = setInterval(() => {
-      setConversionProgress((prevProgress) => {
-        if (prevProgress >= 100) {
-          clearInterval(interval);
-          setIsConverting(false);
-          setConversionComplete(true);
-          return 100;
-        }
-        return prevProgress + 10; // Increment progress by 10%
+  
+    try {
+      const token = localStorage.getItem("authToken"); // Retrieve the token
+  
+      // Send the initial request to start the conversion
+      const response = await apiClient.post(`/upload/${fileID}/convert/`, null, {
+        headers: {
+          ...(token && { Authorization: `Token ${token}` }),
+        },
       });
-    }, 500); // Update progress every 500ms
+  
+      console.log("Conversion initiated:", response.data);
+  
+      // Polling to check conversion progress
+      const interval = setInterval(async () => {
+        try {
+          const statusResponse = await apiClient.get(`/upload/${fileID}/status/`, {
+            headers: {
+              ...(token && { Authorization: `Token ${token}` }),
+            },
+          });
+  
+          const { status, progress } = statusResponse.data; // Backend returns status and progress
+  
+          // Update conversion progress
+          setConversionProgress(progress);
+  
+          if (status === "completed") {
+            clearInterval(interval);
+            console.log("Conversion completed successfully");
+            setIsConverting(false);
+            setConversionComplete(true);
+          } else if (status === "failed") {
+            clearInterval(interval);
+            console.error("Conversion failed");
+            setIsConverting(false);
+            setConversionComplete(false);
+            alert("Conversion failed. Please try again.");
+          }
+        } catch (error) {
+          clearInterval(interval);
+          console.error("Error fetching conversion status:", error.message);
+          alert("An error occurred while checking conversion status.");
+        }
+      }, 1000); // Poll every 1 second for progress updates
+    } catch (error) {
+      console.error("Error during conversion:", error.response?.data || error.message);
+      alert("Failed to initiate conversion. Please try again.");
+    }
   };
+  
 
-  const handleDownload = () => {
-    alert('Download started!');
-    // Implement a mock download (e.g., create a dummy file and download it)
-    const fileName = uploadedFiles[0]?.name.replace(/\.\w+$/, '.mid');
-    const blob = new Blob(['MIDI content'], { type: 'audio/midi' });
-    const link = document.createElement('a');
-    link.href = URL.createObjectURL(blob);
-    link.download = fileName || 'file.mid';
-    link.click();
+  const handleDownload = async () => {
+    try {
+      const token = localStorage.getItem("authToken"); // Retrieve the token for authentication
+      const response = await apiClient.get(`/upload/${fileID}/download/`, {
+        responseType: "blob", // Handle binary file data
+        headers: {
+          ...(token && { Authorization: `Token ${token}` }), // Include token if available
+        },
+      });
+
+      // Process the downloaded file
+      const blob = new Blob([response.data], { type: "audio/mid" });
+      setMidiFileBlob(blob); // Store the blob for use in the audio player
+
+
+      const link = document.createElement("a");
+      link.href = URL.createObjectURL(blob);
+      link.download = `converted_file_${fileID}.mid`; // Provide a filename for the download
+      link.click(); // Trigger the download
+    } catch (error) {
+      // Handle errors
+      console.error(
+        "Error during file download:",
+        error.response?.data || error.message
+      );
+      alert("Failed to download the file. Please try again.");
+    }
   };
 
   return (
@@ -134,10 +240,12 @@ const UploadPage = () => {
             
           </div>
         )}
+
         {conversionComplete && (
           <DownloadPage
-            fileName={uploadedFiles[0]?.name.replace(/\.\w+$/, '.mid')}
+            fileName={uploadedFiles[0]?.name.replace(/\.\w+$/, ".mid")}
             onDownload={handleDownload}
+            midiFileBlob={midiFileBlob}
           />
         )}
       </div>

@@ -3,6 +3,7 @@ import styled from 'styled-components';
 import AccountCircleOutlinedIcon from '@mui/icons-material/AccountCircleOutlined';
 import { Link } from 'react-router-dom';
 import '../headerStyles.css';
+import ThemeSwitcher from '../common/themeSwitcher';
 
 const PageHeader = () => {
   return (
@@ -18,9 +19,12 @@ const PageHeader = () => {
       </div>
 
       <div className="right-links">
-        <Link className="styled-link" to="/profile">
-          <AccountCircleOutlinedIcon className="profile-icon" />
-        </Link>
+        <Link className="styled-profile-link" to="/profile">
+          <AccountCircleOutlinedIcon style={{ fontSize: '60px' }} />
+        </Link>        
+        <ThemeSwitcher />
+
+
       </div>
     </header>
   );

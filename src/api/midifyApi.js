@@ -96,6 +96,29 @@ export const fetchImage = async (uploadId) => {
       throw error.response?.data || error.message; // Re-throw error for the caller to handle
     }
   };
+
+  export const fetchMIDI = async (uploadId) => {
+    try {
+      const response = await apiClient.get(`/history/${uploadId}/fetch-midi/`, {
+        responseType: 'blob', // Fetch the response as binary data
+      });
+  
+      console.log('Upload History Response:', response.data); // Debug API response
+  
+      // Convert Blob to "audio/midi"
+      const originalBlob = response.data;
+      const arrayBuffer = await originalBlob.arrayBuffer();
+      const midiBlob = new Blob([arrayBuffer], { type: 'audio/midi' });
+  
+      console.log('Converted MIDI Blob:', midiBlob);
+  
+      return midiBlob; // Return the correctly typed blob to the caller
+    } catch (error) {
+      console.error('Error fetching midi from history:', error.response?.data || error.message);
+      throw error.response?.data || error.message; // Re-throw error for the caller to handle
+    }
+  };
+  
   
   
 export const fetchProfile = async () => {

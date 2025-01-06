@@ -3,6 +3,7 @@ import styled from 'styled-components';
 import { loginUser } from '../../api/auth';
 import { useNavigate } from 'react-router-dom';
 import AuthContext from '../../api/authContext';
+import '../pageStyles.css';
 
 const Login = ({ setIsLoggedIn }) => {
   const { login } = useContext(AuthContext);
@@ -17,6 +18,7 @@ const Login = ({ setIsLoggedIn }) => {
       const data = await loginUser(username, password);
       setIsLoggedIn(true); // Update login status
       login(data.token);
+      localStorage.setItem('authToken', data.token); // Save token
       alert('Login successful!');
       navigate('/'); // Redirect to DefaultLanding after login
     } catch (err) {

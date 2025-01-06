@@ -31,12 +31,12 @@
     --history-item-color: white;
     --list-item-border-color:black;
     --login-container-bg: #4f4753ba;
-    /* --overlay-color: rgba(78, 49, 170, 0.7);  */
+    --overlay-color: rgba(206, 204, 212, 0.7); 
 
   }
   
   /* Dark theme */
-  [data-theme="dark"] {
+  :root[data-theme="dark"] {
     --background-color: #000000;
     --text-color: #ffffff;
     --drop-text-color: white;
@@ -65,7 +65,7 @@
     margin: 0;
     padding: 0;
     height: 100%;
-    background-color: var(--history-background-color); /* Background image for the default landing */
+    background-color: var(--background-color); /* Background image for the default landing */
 
     /* overflow: hidden;  */
 
@@ -90,7 +90,7 @@
   }
   
   .history-page-container {
-    background-color: var(--history-background-color);
+    background-color: var(--background-color);
     color: var(--text-color);
     height: 100%;
     /* margin-top: 120px; */
@@ -99,7 +99,14 @@
     align-items: center;
     padding: 10px;
   }
+
   
+  
+  .logged-purple-overlay{
+    --overlay-color: rgba(78, 49, 170, 0.7); /* Example overlay color */
+    z-index: 2;
+  }
+   
   .history-title {
     font-size: 4rem;
     font-weight: bold;
@@ -170,7 +177,7 @@
     border-radius: 8px;
     font-size: 1rem;
     display: flex;
-    align-items: right;
+    align-items: center;
     cursor: pointer;
     transition: background 0.3s ease;
   }
@@ -396,11 +403,12 @@
 
   .image-preview-container {
     text-align: center;
+    margin-top: 20px;
   }
   
   .image-preview {
     width: 80%;
-    max-height: 500px; /* Adjust to your preferred size */
+    max-height: 650px; /* Adjust to your preferred size */
     width: auto;
     height: auto;
     margin-bottom: 20px;
@@ -490,6 +498,36 @@
   .download-button:hover {
     background-color: #1a5cad;
   }
+  
+  audio {
+    width: 100%;
+    max-width: 400px;
+    margin-top: 10px;
+  }
+  
+  .midi-player-controls {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+    align-items: center;
+  }
+
+  .audio-player-container {
+    margin-top: 20px; /* Add space between the download container and audio player */
+    text-align: center; /* Center the audio player */
+  }
+  
+  .audio-player-container h3 {
+    margin-bottom: 10px; /* Add some space below the heading */
+    font-size: 1.5rem;
+    color: var(--text-color);
+  }
+  
+  audio {
+    width: 100%; /* Make the audio player take up full width */
+    max-width: 400px; /* Set a max width for smaller screens */
+  }
+  
   
   .loading-container {
     display: flex;
@@ -701,4 +739,48 @@
 }
 
 
-  
+.switch {
+  position: relative;
+  display: inline-block;
+  width: 50px;
+  height: 24px;
+  margin-left: 40px;
+}
+
+.switch input {
+  opacity: 0;
+  width: 0;
+  height: 0;
+}
+
+.slider {
+  position: absolute;
+  cursor: pointer;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: #ccc;
+  transition: 0.4s;
+  border-radius: 20px;
+}
+
+.slider:before {
+  position: absolute;
+  content: "";
+  height: 18px;
+  width: 18px;
+  left: 3px;
+  bottom: 3px;
+  background-color: white;
+  transition: 0.4s;
+  border-radius: 50%;
+}
+
+input:checked + .slider {
+  background-color: #8265e3;
+}
+
+input:checked + .slider:before {
+  transform: translateX(26px);
+}

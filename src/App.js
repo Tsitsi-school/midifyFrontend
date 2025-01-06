@@ -28,15 +28,15 @@ function App() {
 
   useEffect(() => {
     // Set the initial theme based on device preference
-    document.documentElement.setAttribute('data-theme', theme);
+    // document.documentElement.setAttribute('data-theme', theme);
   
-    // Listen for changes to the system color scheme
-    const mediaQuery = window.matchMedia('(prefers-color-scheme: dark)');
-    const handleChange = () => {
-      setTheme(mediaQuery.matches ? 'dark' : 'light');
-    };
+    // // Listen for changes to the system color scheme
+    // const mediaQuery = window.matchMedia('(prefers-color-scheme: dark)');
+    // const handleChange = () => {
+    //   setTheme(mediaQuery.matches ? 'dark' : 'light');
+    // };
   
-    mediaQuery.addEventListener('change', handleChange);
+    // mediaQuery.addEventListener('change', handleChange);
 
     const token = localStorage.getItem('authToken');
     if (token && !isAuthenticated) {
@@ -45,8 +45,8 @@ function App() {
 
 
   
-    // Clean up the event listener on component unmount
-    return () => mediaQuery.removeEventListener('change', handleChange);
+    // // Clean up the event listener on component unmount
+    // return () => mediaQuery.removeEventListener('change', handleChange);
   }, [theme, isAuthenticated,login]);
   
   return (
