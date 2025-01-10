@@ -2,7 +2,7 @@ import React, {useEffect,useState, useContext} from 'react';
 import './App.css';
 // import styled from 'styled-components';
 import DefaultLanding from './components/Pages/DefaultLanding';
-import '/Users/tnyamutswa/thesis/Midify Frontend/midify/src/themes.css';
+import './themes.css';
 import LoggedInLanding from './components/Pages/LoggedInLandingPage';
 import UploadPage from './components/Pages/UploadPage';
 import { BrowserRouter as Router, Routes, Route,Navigate} from 'react-router-dom';

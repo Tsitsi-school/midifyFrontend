@@ -1,287 +1,193 @@
-import React, { useEffect, useState } from 'react';
-import Header from '../Headers/pageHeader.js';
-import FileUpload from '../common/FileUpload.js';
-import UploadList from '../common/UploadList.js';
-import Description from '../common/Description.js';
-import LoadingPage from './LoadingPage.js';
-import DownloadPage from './DownloadPage.js';
-import uploadFile from '../../api/midifyApi.js';
-import apiClient from '../../api/midifyApi.js';
-import '../pageStyles.css';
-import Layout from '../common/Layout.js';
+import React, {useState} from "react";
+import Header from "../Headers/pageHeader.js";
+import FileUpload from "../common/FileUpload.js";
+import UploadList from "../common/UploadList.js";
+import Description from "../common/Description.js";
+import LoadingPage from "./LoadingPage.js";
+import DownloadPage from "./DownloadPage.js";
+import apiClient from "../../api/midifyApi.js";
+import "../pageStyles.css";
+import Layout from "../common/Layout.js";
 
 const UploadPage = () => {
-  const [uploadedFiles, setUploadedFiles] = useState([]);
-  const [isConverting, setIsConverting] = useState(false);
-  const [conversionComplete, setConversionComplete] = useState(false);
-  const [conversionProgress, setConversionProgress] = useState(0); // Track conversion progress
-  const [isUploading, setIsUploading] = useState(false);
-  const [previewUrl, setPreviewUrl] = useState(null); // State for image preview URL
-  const [fileID, setFileID] = useState(0);
-  const [midiFileBlob, setMidiFileBlob] = useState(null); // Add this state
+    const [uploadedFiles, setUploadedFiles] = useState([]);
+    const [isConverting, setIsConverting] = useState(false);
+    const [conversionComplete, setConversionComplete] = useState(false);
+    const [conversionProgress, setConversionProgress] = useState(0);
+    const [midiFileUrl, setMidiFileUrl] = useState(null); // URL for merged MIDI file
+    const [tempo, setTempo] = useState(120);
+    const [timeSignature, setTimeSignature] = useState("4/4");
+    const [previewUrls, setPreviewUrls] = useState([]);
 
+    const handleFileDrop = async (files) => {
+        if (!files || files.length === 0) return;
 
-  // // Simulate fetching uploads from "local storage"
-  // useEffect(() => {
-  //   // const storedFiles = JSON.parse(localStorage.getItem('uploadedFiles')) || [];
-  //   // setUploadedFiles(storedFiles);
-  // }, []);
-
-  // // const handleFileDrop = (files) => {
-  // //   if (!files || files.length === 0) {
-  // //     console.error('No files provided.');
-  // //     return;
-  // //   }
-
-
-
-  const handleFileDrop = async (files) => {
-    if (!files || files.length === 0) {
-      console.error('No files provided.');
-      return;
-    }
-  
-    const file = files[0];
-    setPreviewUrl(URL.createObjectURL(file)); // Set the preview URL for the uploaded image
-
-    const formData = new FormData();
-    formData.append('file', file);
-  
-    try {
-      setIsUploading(true);
-      const token = localStorage.getItem('authToken'); // Retrieve the token
-      console.log(token);
-      const response = await apiClient.post('/upload/', formData, {
-        headers: {
-          'Content-Type': 'multipart/form-data',
-          // ...(token && { Authorization: `Token ${token}` }), // Include token only if it exists
-        },
-      });
-      const uploadedFile = {
-        ...response.data, // File data from the backend
-        name: file.name,
-        size: file.size,  // Size in bytes from the file object
-      };
-      setFileID(uploadedFile.id);
-      setUploadedFiles((prevFiles) => [...prevFiles, uploadedFile]);
-    } catch (error) {
-      console.error('Error uploading file:', error.response?.data || error.message);
-    } finally {
-      setIsUploading(false);
-    }
-  };
-  
-  const onFileChange = (files) => {
-    console.log("[Upload Page] Handling file change...");
-    handleFileDrop(files);
-  };
-
-
-  // const handleConvert = () => {
-  //   setIsConverting(true);
-  //   setConversionComplete(false);
-  //   setConversionProgress(0);
-
-  //   const interval = setInterval(() => {
-  //     setConversionProgress((prevProgress) => {
-  //       if (prevProgress >= 100) {
-  //         clearInterval(interval);
-  //         setIsConverting(false);
-  //         setConversionComplete(true);
-  //         return 100;
-  //       }
-  //       return prevProgress + 10; // Increment progress by 10%
-  //     });
-  //   }, 500); // Update progress every 500ms
-  // };
-
-  // const handleConvert = async () => {
-  //   setIsConverting(true);
-  //   setConversionComplete(false);
-
-  //   try {
-  //     const token = localStorage.getItem("authToken"); // Retrieve the token
-  //     const response = await apiClient.post(
-  //       `/upload/${fileID}/convert/`,
-  //       null,
-  //       {
-  //         headers: {
-  //           ...(token && { Authorization: `Token ${token}` }),
-  //         },
-  //       }
-  //     );
-
-  //     console.log("Conversion initiated:", response.data);
-  //     // Optionally, poll for status or wait for a response indicating completion.
-  //     setConversionComplete(true);
-  //   } catch (error) {
-  //     console.error(
-  //       "Error during conversion:",
-  //       error.response?.data || error.message
-  //     );
-  //   } finally {
-  //     setIsConverting(false);
-  //   }
-  // };
-
-  const handleConvert = async () => {
-    setIsConverting(true);
-    setConversionComplete(false);
-    setConversionProgress(0);
-  
-    try {
-      const token = localStorage.getItem("authToken"); // Retrieve the token
-  
-      // Send the initial request to start the conversion
-      const response = await apiClient.post(`/upload/${fileID}/convert/`, null, {
-        headers: {
-          ...(token && { Authorization: `Token ${token}` }),
-        },
-      });
-  
-      console.log("Conversion initiated:", response.data);
-  
-      // Polling to check conversion progress
-      const interval = setInterval(async () => {
         try {
-          const statusResponse = await apiClient.get(`/upload/${fileID}/status/`, {
-            headers: {
-              ...(token && { Authorization: `Token ${token}` }),
-            },
-          });
-  
-          const { status, progress } = statusResponse.data; // Backend returns status and progress
-  
-          // Update conversion progress
-          setConversionProgress(progress);
-  
-          if (status === "completed") {
-            clearInterval(interval);
-            console.log("Conversion completed successfully");
-            setIsConverting(false);
-            setConversionComplete(true);
-          } else if (status === "failed") {
-            clearInterval(interval);
-            console.error("Conversion failed");
-            setIsConverting(false);
-            setConversionComplete(false);
-            alert("Conversion failed. Please try again.");
-          }
+            const uploadedFiles = [];
+            for (const file of files) {
+                const formData = new FormData();
+                formData.append("file", file);
+
+                const response = await apiClient.post("/upload/", formData, {
+                    headers: {"Content-Type": "multipart/form-data"},
+                });
+                console.log("Uploaded file response:", response.data);
+                uploadedFiles.push(response.data);
+
+                const uploadedFile = {
+                    ...response.data, // File data from the backend
+                    name: file.name,
+                    size: file.size,
+                };
+                console.log("Uploaded file data ", uploadedFile);
+                setUploadedFiles((prevFiles) => [...prevFiles, uploadedFile]);
+
+                // Generate preview URL for the file
+                const previewUrl = URL.createObjectURL(file);
+                setPreviewUrls((prevUrl) => [...(prevUrl || []), previewUrl]);
+            }
         } catch (error) {
-          clearInterval(interval);
-          console.error("Error fetching conversion status:", error.message);
-          alert("An error occurred while checking conversion status.");
+            console.error("Error uploading files:", error);
+            alert(
+                `Error uploading files: ${error.response?.data?.message || error.message}`
+            );
         }
-      }, 1000); // Poll every 1 second for progress updates
-    } catch (error) {
-      console.error("Error during conversion:", error.response?.data || error.message);
-      alert("Failed to initiate conversion. Please try again.");
-    }
-  };
-  
+    };
 
-  const handleDownload = async () => {
-    try {
-      const token = localStorage.getItem("authToken"); // Retrieve the token for authentication
-      const response = await apiClient.get(`/upload/${fileID}/download/`, {
-        responseType: "blob", // Handle binary file data
-        headers: {
-          ...(token && { Authorization: `Token ${token}` }), // Include token if available
-        },
-      });
+    const handleConvert = async () => {
+        if (uploadedFiles.length === 0) {
+            alert("No files to convert");
+            return;
+        }
 
-      // Process the downloaded file
-      const blob = new Blob([response.data], { type: "audio/mid" });
-      setMidiFileBlob(blob); // Store the blob for use in the audio player
+        setIsConverting(true);
+        setConversionComplete(false);
 
+        try {
+            const fileIds = uploadedFiles.map((file) => file.id);
+            console.log("file id", uploadedFiles[0].id)
+            console.log("file id", uploadedFiles[0].name)
+            const response = await apiClient.post("/upload/batch_convert/", {
+                file_ids: fileIds,
+                tempo,
+                timeSignature,
+            });
 
-      const link = document.createElement("a");
-      link.href = URL.createObjectURL(blob);
-      link.download = `converted_file_${fileID}.mid`; // Provide a filename for the download
-      link.click(); // Trigger the download
-    } catch (error) {
-      // Handle errors
-      console.error(
-        "Error during file download:",
-        error.response?.data || error.message
-      );
-      alert("Failed to download the file. Please try again.");
-    }
-  };
+            console.log("Batch conversion completed:", response.data);
+            setConversionComplete(true);
+            setMidiFileUrl(response.data.merged_file_url); // Save the merged MIDI file URL
+        } catch (error) {
+            console.error("Error during batch conversion:", error.response?.data || error.message);
+            alert("Failed to convert files. Please try again.");
+        } finally {
+            setIsConverting(false);
+        }
+    };
 
-  return (
-    <Layout header={Header}>
-      <div className="upload-page-container">
-        {isConverting && <LoadingPage fileName={uploadedFiles[0]?.name} progress={conversionProgress} />}
-        {!isConverting && !conversionComplete && (
-          <div className="upload-centered-content">
-            {previewUrl ? (
-              <div className="image-preview-container">
-                <img
-                  src={previewUrl}
-                  alt="Uploaded Preview"
-                  className="image-preview"
-                />
-                {isUploading && <p>Uploading file, please wait...</p>}
-                {uploadedFiles.length > 0 && <UploadList files={uploadedFiles} />}
-                <button
-                  className="upload-convert-button"
-                  onClick={handleConvert}
-                >
-                  Convert ➔
-                </button>
-              </div>
-            ) : (
-              <>
-                <FileUpload onDrop={onFileChange} />
-                <Description /> {/* Show the description if no file is uploaded */}
-              </>
-            )}
-            
-          </div>
-        )}
+    const handleDownload = async () => {
+        try {
+            const token = localStorage.getItem("authToken"); // Retrieve the token for authentication
+            const response = await apiClient.get(`/upload/${uploadedFiles[0].id}/download/`, {
+                responseType: "blob", // Handle binary file data
+                headers: {
+                    ...(token && {Authorization: `Token ${token}`}), // Include token if available
+                },
+            });
 
-        {conversionComplete && (
-          <DownloadPage
-            fileName={uploadedFiles[0]?.name.replace(/\.\w+$/, ".mid")}
-            onDownload={handleDownload}
-            midiFileBlob={midiFileBlob}
-          />
-        )}
-      </div>
-    </Layout>
-  );
+            // Process the downloaded file
+            const blob = new Blob([response.data], {type: "audio/midi"});
+            console.log(blob);
+            const link = document.createElement("a");
+            link.href = URL.createObjectURL(blob);
+            link.download = `${uploadedFiles[0]?.name.replace(/\.\w+$/, "")}_converted.mid`; // Provide a filename for the download
+            link.click(); // Trigger the download
+        } catch (error) {
+            // Handle errors
+            console.error(
+                "Error during file download:",
+                error.response?.data || error.message
+            );
+            alert("Failed to download the file. Please try again.");
+        }
+    };
 
-  // return (
-  //   <div>
-  //     <Header />
-  //     <div className="upload-page-container">
-  //       {isConverting && <LoadingPage fileName={uploadedFiles[0]?.name} />}
-  //       {!isConverting && !conversionComplete && (
-  //         <div className="upload-centered-content">
-  //           <FileUpload onDrop={onFileChange} />
-  //           {isUploading && <p>Uploading file, please wait...</p>}
-  //           {uploadedFiles.length > 0 ? (
-  //             <>
-  //               <UploadList files={uploadedFiles} />
-  //               <button className="upload-convert-button" onClick={handleConvert}>
-  //                 Convert ➔
-  //               </button>
-  //             </>
-  //           ) : (
-  //             <Description />
-  //           )}
-  //         </div>
-  //       )}
-  //       {conversionComplete && (
-  //         <DownloadPage
-  //           fileName={uploadedFiles[0]?.name.replace(/\.\w+$/, '.mid')}
-  //           onDownload={handleDownload}
-  //         />
-  //       )}
-  //     </div>
-  //   </div>
-  // );
+    return (
+        <Layout header={Header}>
+            <div className="upload-page-container">
+                {isConverting && <LoadingPage progress={conversionProgress}/>}
+                {!isConverting && !conversionComplete && (
+                    <div className="upload-centered-content">
+                        <h1 className="download-title" style={{marginBottom: "20px"}}>Sheet Music to MIDI Converter</h1>
+                        {previewUrls && previewUrls.length > 0 ? (
+                            <>
+                                <div className="image-preview-container">
+                                    {previewUrls.map((url, index) => (
+                                        <img
+                                            key={index}
+                                            src={url}
+                                            alt={`Uploaded Preview ${index + 1}`}
+                                            className="image-preview"
+                                        />
+                                    ))}
+                                </div>
+                                <div className="horizontal-container">
+                                    <div className="input-metrics-container">
+                                        <label className="label-metrics" htmlFor="tempo">
+                                            Tempo (BPM)
+                                        </label>
+                                        <input
+                                            className="input-metrics"
+                                            type="number"
+                                            id="tempo"
+                                            value={tempo}
+                                            onChange={(e) => setTempo(e.target.value)}
+                                            placeholder="e.g., 120"
+                                            min="40"
+                                            max="240"
+                                        />
+                                    </div>
+                                    <div className="input-metrics-container">
+                                        <label
+                                            className="label-metrics"
+                                            htmlFor="timeSignature"
+                                        >
+                                            Time Signature
+                                        </label>
+                                        <input
+                                            className="input-metrics"
+                                            type="text"
+                                            id="timeSignature"
+                                            value={timeSignature}
+                                            onChange={(e) => setTimeSignature(e.target.value)}
+                                            placeholder="e.g., 4/4"
+                                        />
+                                    </div>
+                                </div>
+                            </>
+                        ) : null}
+                        {/*{uploadedFiles.length > 0 && <UploadList files={uploadedFiles}/>}*/}
+                        <FileUpload onDrop={handleFileDrop}/>
+                        {previewUrls && previewUrls.length > 0 ? (
+                            <button
+                                className="upload-convert-button"
+                                onClick={handleConvert}
+                            >
+                                Convert ➔
+                            </button>
+                        ) : <Description/>}
+
+                    </div>
+                )}
+                {conversionComplete && (
+                    <DownloadPage
+                        fileID={uploadedFiles[0].id}
+                        fileName={uploadedFiles[0]?.name.replace(/\.\w+$/, ".mid")}
+                        onDownload={handleDownload}
+                    />
+                )}
+            </div>
+        </Layout>
+    );
 };
 
 export default UploadPage;

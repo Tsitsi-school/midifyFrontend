@@ -1,7 +1,7 @@
 import React from 'react';
 import styled from 'styled-components';
 import { Link } from 'react-router-dom';
-import '/Users/tnyamutswa/thesis/Midify Frontend/midify/src/themes.css';
+import '../../themes.css';
 import AccountCircleOutlinedIcon from '@mui/icons-material/AccountCircleOutlined';
 import '../headerStyles.css';
 import '../pageStyles.css';
