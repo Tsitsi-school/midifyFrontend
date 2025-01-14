@@ -1,0 +1,121 @@
+/* Base Header Styling */
+header {
+  display: flex;
+  z-index: 1000;
+  align-items: center; /* Vertically align items */
+  justify-content: space-between; /* Space between left and right links */
+  width: 100%;
+  height: auto; /* Allow it to adjust dynamically */
+  padding: 20px 5%; /* Increase padding for breathing room */
+  position: fixed;
+  box-sizing: border-box;
+  transition: all 0.3s ease-in-out; /* Smooth transition for resizing */
+}
+
+.header-container {
+  background: linear-gradient(90deg, #4e31aa 0%, #3795bd 50%, #4e31aa 100%);
+  color: white;
+  opacity: 0.9;
+  border-bottom: 2px solid rgba(255, 255, 255, 0.2); /* Subtle border */
+}
+
+.logo {
+  font-size: 3rem; /* Increased logo size */
+  font-weight: bold;
+  cursor: pointer;
+}
+
+.left-links {
+  display: flex;
+  align-items: center;
+  flex: 1; /* Pushes center links to the center */
+}
+
+.center-links {
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  align-items: center;
+  font-size: 2rem; /* Increased link size */
+  gap: 4rem; /* Space between each link */
+}
+
+.right-links {
+  display: flex;
+  align-items: center;
+  flex: 1;
+  justify-content: flex-end;
+}
+
+.styled-link {
+  color: white;
+  text-decoration: none;
+  font-weight: 600; /* Slightly bolder for emphasis */
+  transition: color 0.3s ease-in-out; /* Smooth color transition */
+}
+
+.styled-link:hover {
+  color: #ffdf00; /* Yellowish hover effect */
+}
+
+.profile-icon {
+  font-size: 2.5rem !important; /* Slightly smaller profile icon */
+  cursor: pointer;
+  color: white;
+  margin-left: 20px; /* Add space from the theme switch */
+}
+
+.theme-switcher-container {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-right: 20px; /* Add some space */
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+  header {
+    flex-direction: column;
+    align-items: center;
+    padding: 15px 5%;
+  }
+
+  .center-links {
+    position: static;
+    transform: none;
+    gap: 2rem;
+    margin-top: 15px;
+  }
+
+  .logo {
+    font-size: 2.2rem; /* Slightly smaller logo */
+  }
+
+  .profile-icon {
+    font-size: 2rem;
+  }
+}
+
+@media (max-width: 480px) {
+  header {
+    padding: 10px 5%;
+  }
+
+  .logo {
+    font-size: 1.8rem;
+  }
+
+  .center-links {
+    font-size: 1.2rem; /* Smaller text size for smaller screens */
+    gap: 1.2rem;
+  }
+
+  .styled-link {
+    font-size: 1rem;
+  }
+
+  .profile-icon {
+    font-size: 1.6rem;
+  }
+}
