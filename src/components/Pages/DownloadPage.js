@@ -31,10 +31,9 @@ const ProgressBarWrapper = ({currentTime, duration, onProgressClick}) => {
 };
 
 
-const DownloadPage = ({fileID, fileName, onDownload}) => {
-    const containerRef = useRef(null);
+const DownloadPage = ({fileID, fileName, files, onDownload}) => {
     const [vrvToolkit, setVrvToolkit] = useState(null);
-    const [meiData, setMeiData] = useState(null);
+    const [meiDataList, setMeiDataList] = useState([]); // To store MEI data for all files
     const [error, setError] = useState("");
     const [midiBlob, setMidiBlob] = useState(null); // Store the MIDI blob
     const [activeNotes, setActiveNotes] = useState([]); // Active notes for piano visualization
@@ -44,30 +43,35 @@ const DownloadPage = ({fileID, fileName, onDownload}) => {
     const [currentTime, setCurrentTime] = useState(0); // Current playback time
     const [duration, setDuration] = useState(0); // Total duration of the MIDI file
     const progressIntervalRef = useRef(null); // Reference to the interval for progress updates
+    const containerRefs = useRef([]); // To store multiple container references for MEI data
 
-    const fetchMeiFile = async () => {
+    const fetchMeiFiles = async () => {
         try {
             const token = localStorage.getItem("authToken");
-            const response = await apiClient.get(`/upload/${fileID}/mei/`, {
-                headers: {
-                    ...(token && {Authorization: `Token ${token}`}),
-                },
-            });
-            setMeiData(response.data);
+            const meiDataResponses = await Promise.all(
+                files.map((file) =>
+                    apiClient.get(`/upload/${file.id}/mei/`, {
+                        headers: {
+                            ...(token && {Authorization: `Token ${token}`}),
+                        },
+                    })
+                )
+            );
+            const meiDataArray = meiDataResponses.map((response) => response.data);
+            setMeiDataList(meiDataArray);
         } catch (error) {
-            console.error("Error fetching MEI file:", error.response?.data || error.message);
-            setError("Failed to fetch MEI file. Please try again.");
+            console.error("Error fetching MEI files:", error.response?.data || error.message);
+            setError("Failed to fetch MEI files. Please try again.");
         }
     };
 
     const fetchMidiFile = async () => {
         try {
             const token = localStorage.getItem("authToken");
-            console.log("File id", fileID)
             const response = await apiClient.get(`/upload/${fileID}/download/`, {
                 responseType: "blob",
                 headers: {
-                    ...(token && {Authorization: ` Token ${token}`}),
+                    ...(token && {Authorization: `Token ${token}`}),
                 },
             });
             setMidiBlob(response.data);
@@ -228,7 +232,6 @@ const DownloadPage = ({fileID, fileName, onDownload}) => {
         }
     };
 
-
     const stopMidi = () => {
         // Clear all scheduled timeouts
         timeouts.forEach((timeout) => clearTimeout(timeout));
@@ -260,30 +263,36 @@ const DownloadPage = ({fileID, fileName, onDownload}) => {
 
     useEffect(() => {
         if (fileID) {
-            fetchMeiFile();
+            fetchMeiFiles();
             fetchMidiFile();
         }
     }, [fileID]);
 
     useEffect(() => {
-        if (meiData && vrvToolkit && containerRef.current) {
-            try {
-                vrvToolkit.setOptions({scale: 40});
-                vrvToolkit.loadData(meiData);
-                const totalPages = vrvToolkit.getPageCount();
-                let svgContent = "";
+        meiDataList.forEach((meiData, index) => {
+            renderMeiData(meiData, index);
+        });
+    }, [meiDataList, vrvToolkit]);
 
-                for (let i = 1; i <= totalPages; i++) {
-                    svgContent += vrvToolkit.renderToSVG(i);
-                }
+    const renderMeiData = (meiData, index) => {
+        if (!vrvToolkit || !containerRefs.current[index]) return;
 
-                containerRef.current.innerHTML = svgContent;
-            } catch (err) {
-                console.error("Verovio Render Error:", err);
-                setError(`Error rendering sheet music: ${err.message}`);
+        try {
+            vrvToolkit.setOptions({scale: 40});
+            vrvToolkit.loadData(meiData);
+            const totalPages = vrvToolkit.getPageCount();
+            let svgContent = "";
+
+            for (let i = 1; i <= totalPages; i++) {
+                svgContent += vrvToolkit.renderToSVG(i);
             }
+
+            containerRefs.current[index].innerHTML = svgContent;
+        } catch (err) {
+            console.error(`Verovio Render Error for file ${index + 1}:`, err.message);
+            setError(`Error rendering MEI file ${index + 1}`);
         }
-    }, [meiData, vrvToolkit]);
+    };
 
 
     return (
@@ -320,11 +329,18 @@ const DownloadPage = ({fileID, fileName, onDownload}) => {
                         onProgressClick={(newTime) => startPlaybackAtTime(newTime)}
                     />
                 </div>
-                <div className="mei-container" ref={containerRef}/>
+                <div className="mei-display-container">
+                    {meiDataList.map((_, index) => (
+                        <div
+                            key={index}
+                            className="mei-container"
+                            ref={(el) => (containerRefs.current[index] = el)}
+                        ></div>
+                    ))}
+                </div>
             </div>
         </div>
-    )
-        ;
+    );
 };
 
 export default DownloadPage;

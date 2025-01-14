@@ -1,9 +1,7 @@
-import React, {useCallback, useState} from 'react';
+import React, {useCallback} from 'react';
 import {useDropzone} from 'react-dropzone';
 import styled from 'styled-components';
 import UploadFileOutlinedIcon from '@mui/icons-material/UploadFileOutlined';
-import {UpdateDisabledOutlined} from '@mui/icons-material';
-import {apiClient} from '../../api/midifyApi'; // Use the central API client
 
 
 const UploadContainer = styled.div`
@@ -17,21 +15,6 @@ const UploadContainer = styled.div`
     margin-top: 10px;
 `;
 
-const UploadContainerSmall = styled.div`
-    display: flex;
-    flex-direction: row;
-    padding: 20px;
-    border: 5px dashed var(--upload-border-color);
-    text-align: center;
-    border-radius: 2px;
-    color: var(--upload-container-bg);
-    background-color: var(--upload-container-bg);
-    box-shadow: 0px 4px 12px rgba(0, 0, 0, 0.1);
-    margin-top: 10px;
-    gap: 20px;
-    justify-content: center;
-    align-items: center;
-`;
 
 const UploadButton = styled.button`
     //display: flex;
@@ -60,14 +43,6 @@ const DropText = styled.p`
     font-weight: bold;
 `;
 
-const Title = styled.h1`
-    font-size: 4rem; /* Increase font size for emphasis */
-    font-weight: bold;
-    color: var(--text-color);
-    text-align: center;
-    padding: 20px;
-`;
-
 const Icon = styled(UploadFileOutlinedIcon)`
     font-size: 1.8rem !important;
     margin-right: 10px;
@@ -83,12 +58,9 @@ const ButtonText = styled.span`
 
 const FileUpload = ({onDrop}) => {
 
-    const [fileDropped, setFileDropped] = useState(false);
-
     const handleDrop = useCallback((acceptedFiles) => {
         console.log("Files dropped:", acceptedFiles);
         onDrop(acceptedFiles); // Pass all files to the parent component
-        setFileDropped(true);
     }, [onDrop]);
 
     const {getRootProps, getInputProps} = useDropzone({
@@ -98,15 +70,6 @@ const FileUpload = ({onDrop}) => {
 
     return (
         <div>
-            {/*{fileDropped ? (*/}
-            {/*    <UploadContainerSmall {...getRootProps()}>*/}
-            {/*        <input {...getInputProps()} />*/}
-            {/*        <UploadButton>*/}
-            {/*            <Icon/>*/}
-            {/*            <ButtonText>CHOOSE MORE FILES OR DROP THEM HERE</ButtonText>*/}
-            {/*        </UploadButton>*/}
-            {/*    </UploadContainerSmall>*/}
-            {/*) : (*/}
             <UploadContainer {...getRootProps()}>
                 <input {...getInputProps()} />
                 <UploadButton>
@@ -115,7 +78,6 @@ const FileUpload = ({onDrop}) => {
                 </UploadButton>
                 <DropText>OR DROP FILES HERE</DropText>
             </UploadContainer>
-            {/*)}*/}
         </div>
     );
 };
