@@ -297,7 +297,7 @@ const DownloadPage = ({fileID, fileName, files, onDownload}) => {
 
     return (
         <div>
-            <h1 className="download-title">Sheet Music to MIDI Converter</h1>
+            <h1 className="download-title">Converted Files</h1>
             <div className="download-page-container">
                 <div className="download-container">
                     <div className="download-file-info">

@@ -18,7 +18,6 @@ const Login = ({setIsLoggedIn}) => {
             setIsLoggedIn(true); // Update login status
             login(data.token);
             localStorage.setItem('authToken', data.token); // Save token
-            alert('Login successful!');
             navigate('/'); // Redirect to DefaultLanding after login
         } catch (err) {
             setError('Login failed. Please check your username and password.');

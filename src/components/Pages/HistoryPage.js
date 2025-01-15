@@ -5,7 +5,6 @@ import Header from '../Headers/pageHeader';
 import {fetchImage, fetchMIDI, fetchUploadHistory} from '../../api/midifyApi';
 import {format} from 'date-fns';
 import Layout from '../common/Layout';
-import {useNavigate} from 'react-router-dom';
 import '../pageStyles.css';
 
 const HistoryPage = () => {

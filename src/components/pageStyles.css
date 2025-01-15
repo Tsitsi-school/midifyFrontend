@@ -312,7 +312,10 @@ body, html {
     font-size: 1rem;
     color: var(--text-color);
     background-color: var(--upload-container-bg);
-    cursor: not-allowed;
+}
+
+.profile-form-field:disabled {
+    background-color: gray;
 }
 
 .profile-form-field[editable="true"] {
@@ -333,7 +336,10 @@ body, html {
     font-size: 1rem;
     color: var(--text-color);
     background-color: var(--upload-container-bg);
-    cursor: not-allowed;
+}
+
+.profile-form-field-select:disabled {
+    background-color: gray;
 }
 
 .profile-form-field-select[editable="true"] {
@@ -397,7 +403,6 @@ profile-edit-button:hover {
 
 .upload-convert-button:disabled {
     background-color: #ccc;
-    cursor: not-allowed;
 }
 
 .image-preview-container {
@@ -775,7 +780,7 @@ audio {
 .login-title {
     font-size: 2.5rem;
     font-weight: bold;
-    color: var(--title-color);
+    color: white;
     margin-bottom: 20px;
 }
 
