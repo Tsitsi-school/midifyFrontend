@@ -1,6 +1,6 @@
 import React, {useState, useContext} from 'react';
 import {loginUser} from '../../api/auth';
-import {useNavigate} from 'react-router-dom';
+import {Link, useNavigate} from 'react-router-dom';
 import AuthContext from '../../api/authContext';
 import '../pageStyles.css';
 
@@ -28,7 +28,7 @@ const Login = ({setIsLoggedIn}) => {
         <div className="logged-purple-overlay">
             <div className="login-page-container">
                 <div className="login-container">
-                    <h1 className="login-title">Login</h1>
+                    <h1 className="login-title">Welcome to Midify!</h1>
                     <form className="login-form" onSubmit={handleSubmit}>
                         <input
                             className="login-input"
@@ -47,6 +47,12 @@ const Login = ({setIsLoggedIn}) => {
                         <button className="login-button" type="submit">Login</button>
                     </form>
                     {error && <p className="login-error-message">{error}</p>}
+                    <p className="login-footer">
+                        Don't have an account?{' '}
+                        <Link to="/signup" className="signup-link">
+                            Sign up
+                        </Link>
+                    </p>
                 </div>
             </div>
         </div>
