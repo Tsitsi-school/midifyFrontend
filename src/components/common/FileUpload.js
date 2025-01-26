@@ -46,9 +46,7 @@ const DropText = styled.p`
 const Icon = styled(UploadFileOutlinedIcon)`
     font-size: 1.8rem !important;
     margin-right: 10px;
-    vertical-align: -7px; /* Try adjusting to "middle" */
-    /* For finer adjustments, use a value like -2px or -3px */
-    /* vertical-align: -2px; */
+    vertical-align: -7px;
 `;
 
 
@@ -60,12 +58,12 @@ const FileUpload = ({onDrop}) => {
 
     const handleDrop = useCallback((acceptedFiles) => {
         console.log("Files dropped:", acceptedFiles);
-        onDrop(acceptedFiles); // Pass all files to the parent component
+        onDrop(acceptedFiles);
     }, [onDrop]);
 
     const {getRootProps, getInputProps} = useDropzone({
         onDrop: handleDrop,
-        multiple: true, // Enable multiple files
+        multiple: true,
     });
 
     return (

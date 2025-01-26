@@ -20,7 +20,7 @@ const FileInfo = styled.div`
 
 const FileIcon = styled(InsertDriveFileOutlinedIcon)`
     font-size: 2rem !important;
-    margin-right: 8px; /* Adjust this to control spacing between icon and text */
+    margin-right: 8px;
     color: var(--file-info-color);
 `;
 
@@ -42,8 +42,6 @@ const UploadList = ({files, setUploadedFiles}) => {
                 <FileName>{file.name}</FileName>
             </FileInfo>
             <FileSize>{(file.size / 1024).toFixed(2)} KB</FileSize>
-            {/* Uncomment if delete functionality is needed */}
-            {/* <DeleteButton onClick={() => handleDelete(file.id)}>Delete</DeleteButton> */}
         </FileContainer>
     ));
 };

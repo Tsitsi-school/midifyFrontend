@@ -29,7 +29,7 @@
     --history-background-color: #F7F7F8;
     --history-item-color: white;
     --list-item-border-color: black;
-    --login-container-bg: #4f4753ba;
+    --login-container-bg: rgba(0, 0, 0, 0.39);
     --overlay-color: rgba(206, 204, 212, 0.7);
 
 }
@@ -312,7 +312,10 @@ body, html {
     font-size: 1rem;
     color: var(--text-color);
     background-color: var(--upload-container-bg);
-    cursor: not-allowed;
+}
+
+.profile-form-field:disabled {
+    background-color: gray;
 }
 
 .profile-form-field[editable="true"] {
@@ -333,7 +336,10 @@ body, html {
     font-size: 1rem;
     color: var(--text-color);
     background-color: var(--upload-container-bg);
-    cursor: not-allowed;
+}
+
+.profile-form-field-select:disabled {
+    background-color: gray;
 }
 
 .profile-form-field-select[editable="true"] {
@@ -397,7 +403,6 @@ profile-edit-button:hover {
 
 .upload-convert-button:disabled {
     background-color: #ccc;
-    cursor: not-allowed;
 }
 
 .image-preview-container {
@@ -711,41 +716,6 @@ audio {
     }
 }
 
-
-/* .loading-container {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  text-align: center;
-  height: 80vh; /* Takes up full viewport height */
-/* } */
-
-/* .loading-spinner {
- border: 25px solid var(--spinner-color-lighter);
- border-top: 25px solid var(--spinner-color-darker);
- border-radius: 80%;
- width: 120px;
- height: 120px;
- animation: spin 1s linear infinite;
- margin-bottom: 20px;
-}
-
-@keyframes spin {
- 0% {
-   transform: rotate(0deg);
- }
- 100% {
-   transform: rotate(360deg);
- }
-}
-
-.loading-text {
- font-size: 1.1rem;
- color: var(--text-color);
- font-weight: 500;
-} */
-
 .login-page-container {
     background-image: url('../../public/background.png');
     color: var(--text-color);
@@ -765,8 +735,8 @@ audio {
     padding: 40px;
     border-radius: 10px;
     box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
-    width: 40%;
-    height: 50%;
+    width: 30%;
+    min-height: 60%;
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -775,8 +745,8 @@ audio {
 .login-title {
     font-size: 2.5rem;
     font-weight: bold;
-    color: var(--title-color);
-    margin-bottom: 20px;
+    color: white;
+    margin-bottom: 40px;
 }
 
 .login-form {
@@ -784,6 +754,8 @@ audio {
     display: flex;
     flex-direction: column;
     gap: 15px;
+    color: white;
+    font-size: larger;
 }
 
 .login-input {
@@ -802,14 +774,19 @@ audio {
 
 .login-button {
     padding: 10px;
+    margin-top: 30px;
     font-size: 1rem;
     font-weight: bold;
+    width: 30%;
     background-color: var(--upload-button-bg);
     color: var(--upload-button-text);
     border: none;
     border-radius: 5px;
     cursor: pointer;
     transition: background-color 0.3s;
+
+    justify-self: center;
+    align-self: center;
 }
 
 .login-button:hover {
@@ -820,6 +797,18 @@ audio {
     color: #ff6b6b;
     font-size: 0.9rem;
     margin-top: 10px;
+}
+
+.login-footer {
+    color: white;
+    margin-top: 40px;
+    /*justify-self: flex-end;*/
+    /*align-self: flex-end;*/
+}
+
+.signup-link {
+    color: #3795BDFF;
+    font-weight: bold;
 }
 
 /* Center the container */

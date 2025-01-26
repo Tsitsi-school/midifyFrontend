@@ -12,6 +12,7 @@ import AboutPage from './components/Pages/AboutPage';
 import Login from './components/Pages/Login';
 import ProtectedRoute from './components/common/ProtectedRoute';
 import AuthContext from './api/authContext';
+import SignUpPage from "./components/Pages/SignUpPage";
 
 function App() {
     const {isAuthenticated, login} = useContext(AuthContext);
@@ -51,6 +52,7 @@ function App() {
             <GlobalStyle/>
             <Routes>
                 <Route path="/login" element={<Login setIsLoggedIn={setIsLoggedIn}/>}/>
+                <Route path="/signup" element={<SignUpPage/>}/>
                 <Route
                     path="/home"
                     element={
