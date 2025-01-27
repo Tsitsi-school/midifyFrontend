@@ -222,7 +222,7 @@ const DownloadPage = ({ fileID, fileName, files, onDownload }) => {
           const deactivateTimeout = setTimeout(() => {
             setActiveNotes((prev) => {
               const midiNumber = MidiNumbers.fromNote(note.name);
-              return prev.filter((n) => n !== midiNumber); // Remove only the specific note
+              return prev.filter((n) => n !== midiNumber);
             });
           }, endTime * 1000);
           newTimeouts.push(deactivateTimeout);
