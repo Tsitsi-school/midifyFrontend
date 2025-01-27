@@ -30,6 +30,7 @@ const HistoryPage = () => {
       const link = document.createElement("a");
       link.href = window.URL.createObjectURL(blob); // Create a URL from the blob
       link.download = `midi_${uploadId}.mid`;
+      link.click();
 
       console.log(`MIDI file with ID ${uploadId} downloaded successfully.`);
     } catch (error) {
