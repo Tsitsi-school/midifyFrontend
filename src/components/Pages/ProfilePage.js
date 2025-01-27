@@ -15,7 +15,8 @@ const ProfilePage = () => {
     const fetchProfileData = async () => {
       try {
         const data = await fetchProfile();
-        setProfile(data); // Set the fetched profile data
+        // Set the fetched profile data
+        setProfile(data);
       } catch (error) {
         setError("Failed to fetch profile.");
         console.error("Error fetching profile:", error);
@@ -70,7 +71,7 @@ const ProfilePage = () => {
               value={profile.first_name}
               onChange={(e) =>
                 setProfile({ ...profile, first_name: e.target.value })
-              } // Update state
+              }
               disabled={!isEditable}
             />
           </div>

@@ -1,22 +1,20 @@
-import axios from 'axios';
-import { useContext } from 'react';
-import AuthContext from './authContext';
+import axios from "axios";
+import { useContext } from "react";
+import AuthContext from "./authContext";
 
-const API_BASE_URL = 'http://127.0.0.1:8000/api';
-
-// const token = '07d6787ec303767bdb118a0b6a0ac5802ee75537';
+const API_BASE_URL = "http://127.0.0.1:8000/api";
 
 // Axios instance with default settings
 const apiClient = axios.create({
   baseURL: API_BASE_URL,
   headers: {
-    'Content-Type': 'application/json',
+    "Content-Type": "application/json",
   },
 });
 
 // Attach token to requests automatically
 apiClient.interceptors.request.use((config) => {
-  const token = localStorage.getItem('authToken'); 
+  const token = localStorage.getItem("authToken");
   if (token) {
     config.headers.Authorization = `Token ${token}`;
   }
@@ -24,122 +22,125 @@ apiClient.interceptors.request.use((config) => {
 });
 
 export const useApiClient = () => {
-    const { authToken } = useContext(AuthContext);
-  
-    const client = axios.create({
-      baseURL: API_BASE_URL,
-      headers: {
-        'Content-Type': 'application/json',
-      },
-    });
-  
-    client.interceptors.request.use((config) => {
-      if (authToken) {
-        config.headers.Authorization = `Token ${authToken}`;
-      }
-      return config;
-    });
-  
-    return client;
-  };
+  const { authToken } = useContext(AuthContext);
 
-// Centralized error handling
+  const client = axios.create({
+    baseURL: API_BASE_URL,
+    headers: {
+      "Content-Type": "application/json",
+    },
+  });
+
+  client.interceptors.request.use((config) => {
+    if (authToken) {
+      config.headers.Authorization = `Token ${authToken}`;
+    }
+    return config;
+  });
+
+  return client;
+};
+
+// API request error handling
 const handleApiError = (error) => {
   console.error("API Error:", error.response?.data || error.message);
   throw error.response?.data || error.message;
 };
 
-// API functions
+// API request related functions
 export const getApiOverview = async () => {
   try {
-    const response = await apiClient.get('/');
+    const response = await apiClient.get("/");
     return response.data;
   } catch (error) {
     handleApiError(error);
   }
 };
-
 
 export const deleteUpload = async (id) => {
   try {
     await apiClient.delete(`/upload/${id}/`);
-    console.log('File deleted successfully.');
+    console.log("File deleted successfully.");
   } catch (error) {
-    console.error('Error deleting file:', error);
+    console.error("Error deleting file:", error);
     throw error;
   }
 };
 
-
 export const fetchUploadHistory = async () => {
-    try {
-      const response = await apiClient.get('/history/');
-      console.log('Upload History Response:', response.data); // Debug API response
-
-      return response.data; // Return the data to be used in the component
-    } catch (error) {
-      console.error('Error fetching history:', error.response?.data || error.message);
-      throw error.response?.data || error.message; // Re-throw error for the caller to handle
-    }
-  };
+  try {
+    const response = await apiClient.get("/history/");
+    console.log("Upload History Response:", response.data);
+    return response.data;
+  } catch (error) {
+    console.error(
+      "Error fetching history:",
+      error.response?.data || error.message
+    );
+    throw error.response?.data || error.message;
+  }
+};
 
 export const fetchImage = async (uploadId) => {
-    try {
-      const response = await apiClient.get(`/history/${uploadId}/`, {
-        responseType: 'blob', // Fetch the response as binary data
-      });
-      console.log('Upload History Response:', response.data); // Debug API response
+  try {
+    const response = await apiClient.get(`/history/${uploadId}/`, {
+      responseType: "blob",
+    });
+    console.log("Upload History Response:", response.data);
+    return response.data;
+  } catch (error) {
+    console.error(
+      "Error fetching image from history:",
+      error.response?.data || error.message
+    );
+    throw error.response?.data || error.message;
+  }
+};
 
-      return response.data; // Return the data to be used in the component
-    } catch (error) {
-      console.error('Error fetching image from history:', error.response?.data || error.message);
-      throw error.response?.data || error.message; // Re-throw error for the caller to handle
-    }
-  };
+export const fetchMIDI = async (uploadId) => {
+  try {
+    const response = await apiClient.get(`/history/${uploadId}/fetch-midi/`, {
+      responseType: "blob",
+    });
+    console.log("Upload History Response:", response.data);
+    // Convert Blob to "audio/midi"
+    const originalBlob = response.data;
+    const arrayBuffer = await originalBlob.arrayBuffer();
+    const midiBlob = new Blob([arrayBuffer], { type: "audio/midi" });
 
-  export const fetchMIDI = async (uploadId) => {
-    try {
-      const response = await apiClient.get(`/history/${uploadId}/fetch-midi/`, {
-        responseType: 'blob', // Fetch the response as binary data
-      });
-  
-      console.log('Upload History Response:', response.data); // Debug API response
-  
-      // Convert Blob to "audio/midi"
-      const originalBlob = response.data;
-      const arrayBuffer = await originalBlob.arrayBuffer();
-      const midiBlob = new Blob([arrayBuffer], { type: 'audio/midi' });
-  
-      console.log('Converted MIDI Blob:', midiBlob);
-  
-      return midiBlob; // Return the correctly typed blob to the caller
-    } catch (error) {
-      console.error('Error fetching midi from history:', error.response?.data || error.message);
-      throw error.response?.data || error.message; // Re-throw error for the caller to handle
-    }
-  };
-  
-  
-  
+    console.log("Converted MIDI Blob:", midiBlob);
+    // Return the correctly typed blob to the caller
+    return midiBlob;
+  } catch (error) {
+    console.error(
+      "Error fetching midi from history:",
+      error.response?.data || error.message
+    );
+    throw error.response?.data || error.message;
+  }
+};
+
 export const fetchProfile = async () => {
-    try {
-      const response = await apiClient.get('/profile/');
-      console.log(response.data);
-      return response.data;
-    } catch (error) {
-      console.error('Error fetching profile:', error.response?.data || error.message);
-      throw error.response?.data || error.message; // Re-throw error for the caller
-    }
-  };
-  
+  try {
+    const response = await apiClient.get("/profile/");
+    console.log(response.data);
+    return response.data;
+  } catch (error) {
+    console.error(
+      "Error fetching profile:",
+      error.response?.data || error.message
+    );
+    throw error.response?.data || error.message;
+  }
+};
 
 export const updateProfile = async (data) => {
   try {
-    const response = await apiClient.put('/profile/', data);
+    const response = await apiClient.put("/profile/", data);
     return response.data;
   } catch (error) {
     handleApiError(error);
   }
 };
 
-export default apiClient; 
+export default apiClient;

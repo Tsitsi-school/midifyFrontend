@@ -80,8 +80,3 @@ export const testApi = async () => {
     throw error.response?.data || error.message;
   }
 };
-
-// // Logout Function
-// export const logoutUser = () => {
-//     localStorage.removeItem('authToken'); // Clear the token from localStorage
-//   };

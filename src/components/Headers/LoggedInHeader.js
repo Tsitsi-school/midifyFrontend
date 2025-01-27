@@ -1,6 +1,5 @@
 import { React, useContext } from "react";
 import { Link } from "react-router-dom";
-import "../../themes.css";
 import AccountCircleOutlinedIcon from "@mui/icons-material/AccountCircleOutlined";
 import "../headerStyles.css";
 import "../pageStyles.css";

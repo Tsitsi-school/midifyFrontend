@@ -1,13 +1,3 @@
-/* :root {
-    --history-background-color: #f9f9f9;
-    --text-color: #333;
-    --title-color: #000;
-    --history-item-color: #fff;
-    --list-item-border-color: #ccc;
-    --upload-button-bg: #007bff;
-    --upload-button-text: #fff;
-  } */
-
 /* Light theme  for upload page*/
 :root {
   --background-color: #f0f2f5;
@@ -53,7 +43,7 @@
   --history-item-color: black;
   --list-item-border-color: white;
   --login-container-bg: #4f4753ba;
-  --overlay-color: rgba(78, 49, 170, 0.7); /* Example overlay color */
+  --overlay-color: rgba(78, 49, 170, 0.7);
 }
 
 body,
@@ -61,25 +51,19 @@ html {
   margin: 0;
   padding: 0;
   height: 100%;
-  background-color: var(
-    --background-color
-  ); /* Background image for the default landing */
-
-  /* overflow: hidden;  */
+  background-color: var(--background-color);
 }
 
 .page-content {
-  flex: 1 1 auto; /* Content takes remaining space */
-  overflow-y: auto; /* Ensure content is scrollable */
+  flex: 1 1 auto;
+  overflow-y: auto;
   height: 100%;
-  /* padding-top: 30; */
   margin-top: 120px;
 }
 
 .app-container {
-  /* display: grid; */
   grid-template-rows: auto 1fr;
-  height: 100%; /* Full viewport height */
+  height: 100%;
   width: 100%;
   display: flex;
   flex-direction: column;
@@ -89,7 +73,6 @@ html {
   background-color: var(--background-color);
   color: var(--text-color);
   height: 100%;
-  /* margin-top: 120px; */
   flex-direction: column;
   display: flex;
   align-items: center;
@@ -97,7 +80,7 @@ html {
 }
 
 .logged-purple-overlay {
-  --overlay-color: rgba(78, 49, 170, 0.7); /* Example overlay color */
+  --overlay-color: rgba(78, 49, 170, 0.7);
   z-index: 2;
 }
 
@@ -111,10 +94,9 @@ html {
 
 .history-list {
   width: 90%;
-  /* max-width: 900px;  */
   display: flex;
   flex-direction: column;
-  gap: 5px; /* Space between each history item */
+  gap: 5px;
 }
 
 .history-item {
@@ -136,26 +118,25 @@ html {
 
 .history-file-info {
   display: flex;
-  flex-wrap: wrap; /* Ensure children wrap to the next line if needed */
-  gap: 10px; /* Space between children */
-  align-items: center; /* Vertically center the children */
-  width: 100%; /*Take full width of the parent */
+  flex-wrap: wrap;
+  gap: 10px;
+  align-items: center;
+  width: 100%;
   flex-grow: 1;
 }
 
 .history-file-name {
   font-size: 1rem;
   color: var(--text-color);
-  white-space: nowrap; /* Prevent text from wrapping */
-  overflow: hidden; /* Hide overflowing text */
-  text-overflow: ellipsis; /* Add "..." for long text */
-  max-width: 60%; /* Constrain the file name's width */
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-width: 60%;
 }
 
 .history-file-date {
   font-size: 0.9rem;
   color: var(--text-color);
-  /* padding-left: 70%; */
   flex: 1;
   margin-right: 20px;
   white-space: nowrap;
@@ -345,11 +326,6 @@ profile-edit-button:hover {
   align-items: center;
   justify-content: center;
   margin-bottom: 50px;
-  /* position: fixed; */
-}
-
-.upload-centered-content {
-  /* Styles for the centered content can be added here */
 }
 
 .upload-convert-button {
@@ -381,23 +357,23 @@ profile-edit-button:hover {
 }
 
 .image-preview {
-  max-height: 1000px; /* Adjust to your preferred size */
+  max-height: 1000px;
   width: auto;
   height: auto;
   margin-bottom: 20px;
-  border: 2px solid #ddd; /* Optional border for aesthetics */
-  border-radius: 8px; /* Optional rounded corners */
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Optional shadow for better visual effect */
+  border: 2px solid #ddd;
+  border-radius: 8px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
 
   @media (max-width: 768px) {
-    max-height: 300px; /* Smaller max height for smaller screens */
+    max-height: 300px;
   }
 }
 
 .default-fullscreen-container {
-  height: 100vh; /* Full screen height */
-  width: 100vw; /* Full screen width */
-  background-image: url("../../public/background.png"); /* Background image for the default landing */
+  height: 100vh;
+  width: 100vw;
+  background-image: url("../../public/background.png");
   background-size: cover;
   background-position: center;
   background-repeat: no-repeat;
@@ -553,7 +529,7 @@ profile-edit-button:hover {
   background-color: #fff;
   border-radius: 10px;
   overflow: hidden;
-  position: relative; /* Add this for positioning */
+  position: relative;
 
   .progress {
     height: 100%;
@@ -590,8 +566,8 @@ profile-edit-button:hover {
   display: flex;
   flex-direction: column;
   margin: 20px 0;
-  align-items: center; /* Align inputs and labels vertically */
-  justify-content: center; /* Adjust alignment to start */
+  align-items: center;
+  justify-content: center;
 }
 
 .label-metrics {
@@ -615,19 +591,19 @@ audio {
 }
 
 .audio-player-container {
-  margin-top: 20px; /* Add space between the download container and audio player */
-  text-align: center; /* Center the audio player */
+  margin-top: 20px;
+  text-align: center;
 }
 
 .audio-player-container h3 {
-  margin-bottom: 10px; /* Add some space below the heading */
+  margin-bottom: 10px;
   font-size: 1.5rem;
   color: var(--text-color);
 }
 
 audio {
-  width: 100%; /* Make the audio player take up full width */
-  max-width: 400px; /* Set a max width for smaller screens */
+  width: 100%;
+  max-width: 400px;
 }
 
 .loading-container {
@@ -771,8 +747,6 @@ audio {
 .login-footer {
   color: white;
   margin-top: 40px;
-  /*justify-self: flex-end;*/
-  /*align-self: flex-end;*/
 }
 
 .signup-link {
@@ -780,7 +754,6 @@ audio {
   font-weight: bold;
 }
 
-/* Center the container */
 .history-page-container.no-history-container {
   display: flex;
   flex-direction: column;
@@ -788,11 +761,10 @@ audio {
   background-color: var(--history-background-color);
   align-items: center;
   color: var(--text-color);
-  height: 100vh; /* Adjust based on the layout */
+  height: 100vh;
   text-align: center;
 }
 
-/* No history content styling */
 .no-history-content {
   max-width: 500px;
   border-radius: 10px;
@@ -801,14 +773,12 @@ audio {
   box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
 }
 
-/* Icon styling */
 .no-history-icon {
   font-size: 10rem;
   color: var(--text-color-secondary);
   margin-bottom: 20px;
 }
 
-/* Message styling */
 .no-history-content h2 {
   font-size: 1.8rem;
   color: var(--text-color);

@@ -1,14 +1,14 @@
 header {
   display: flex;
   z-index: 1000;
-  align-items: center; /* Vertically align items */
-  justify-content: space-between; /* Space between left and right links */
+  align-items: center;
+  justify-content: space-between;
   width: 100%;
-  height: auto; /* Allow it to adjust dynamically */
+  height: auto;
   padding: 15px 5%;
   position: fixed;
   box-sizing: border-box;
-  transition: all 0.3s ease-in-out; /* Smooth transition for resizing */
+  transition: all 0.3s ease-in-out;
 }
 
 .header-container {
@@ -27,7 +27,7 @@ header {
   display: flex;
   align-items: center;
   width: auto;
-  flex: none; /* Pushes center links to the center */
+  flex: none;
 }
 
 .center-links {
@@ -37,31 +37,28 @@ header {
   display: flex;
   align-items: center;
   font-size: 2rem;
-  gap: 4rem; /* Space between each link */
+  gap: 4rem;
 }
 
 .right-links {
   display: flex;
   align-items: center;
   justify-content: flex-end;
-  width: auto; /* Automatically adjusts based on content */
-  flex: none; /* Prevent it from stretching unnecessarily */
+  width: auto;
+  flex: none;
 }
 
 .styled-link {
   color: white;
   text-decoration: none;
   font-weight: 600;
-  transition: color 0.3s ease-in-out; /* Smooth color transition */
-
-  /* z-index: 2; */
+  transition: color 0.3s ease-in-out;
 }
 
 .styled-profile-link {
   color: white;
   text-decoration: none;
-  transition: color 0.3s ease-in-out; /* Smooth color transition */
-  /* z-index: 2; */
+  transition: color 0.3s ease-in-out;
 }
 
 .styled-link:hover {
@@ -71,46 +68,46 @@ header {
 .logout-text {
   font-size: 1.5rem;
 }
-/* Responsive adjustments */
+
 @media (max-width: 768px) {
   header {
-    flex-direction: column; /* Stack header elements vertically */
+    flex-direction: column;
     align-items: center;
-    padding: 10px 5%; /* Adjust padding */
+    padding: 10px 5%;
   }
 
   .center-links {
-    position: static; /* Remove absolute positioning */
-    transform: none; /* No transform required */
-    gap: 2rem; /* Smaller gap */
+    position: static;
+    transform: none;
+    gap: 2rem;
     margin-top: 10px;
   }
 
   .logo {
-    font-size: 1.8rem; /* Smaller logo font size */
+    font-size: 1.8rem;
   }
 
   .profile-icon {
-    font-size: 1.8rem; /* Adjust profile icon size */
+    font-size: 1.8rem;
   }
 }
 
 @media (max-width: 480px) {
   header {
-    padding: 8px 5%; /* Further reduce padding for smaller screens */
+    padding: 8px 5%;
   }
 
   .logo {
-    font-size: 1.2rem; /* Even smaller font size for very small screens */
+    font-size: 1.2rem;
   }
 
   .center-links {
-    font-size: 1rem; /* Adjust font size for links */
-    gap: 1rem; /* Reduce gap */
+    font-size: 1rem;
+    gap: 1rem;
   }
 
   .styled-link {
-    font-size: 0.9rem; /* Adjust link font size */
+    font-size: 0.9rem;
   }
 }
 
@@ -120,8 +117,8 @@ header {
   left: 0;
   right: 0;
   bottom: 0;
-  background-color: var(--overlay-color); /* Adjust alpha for transparency */
-  z-index: 1; /* Ensures it sits above the background but below content */
+  background-color: var(--overlay-color);
+  z-index: 1;
 }
 
 .logged-header-container {
