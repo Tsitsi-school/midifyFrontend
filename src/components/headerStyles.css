@@ -1,131 +1,127 @@
+header {
+  display: flex;
+  z-index: 1000;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+  height: auto;
+  padding: 15px 5%;
+  position: fixed;
+  box-sizing: border-box;
+  transition: all 0.3s ease-in-out;
+}
 
-  header {
-    display: flex;
-    z-index: 1000;
-    align-items: center; /* Vertically align items */
-    justify-content: space-between; /* Space between left and right links */
-    width: 100%;
-    height: auto; /* Allow it to adjust dynamically */
-    padding: 15px 5%;
-    position: fixed;
-    box-sizing: border-box;
-    transition: all 0.3s ease-in-out; /* Smooth transition for resizing */
- 
-  }
-  
+.header-container {
+  background: linear-gradient(90deg, #4e31aa 0%, #3795bd 50%, #4e31aa 100%);
+  color: white;
+  opacity: 0.9;
+}
 
-  .header-container {
-    background: linear-gradient(90deg, #4e31aa 0%, #3795bd 50%, #4e31aa 100%);
-    color: white;
-    opacity: 0.9; 
-  }
+.logo {
+  font-size: 3rem;
+  font-weight: bold;
+  cursor: pointer;
+}
 
+.left-links {
+  display: flex;
+  align-items: center;
+  width: auto;
+  flex: none;
+}
 
-  .logo {
-    font-size: 3rem;
-    font-weight: bold;
-    cursor: pointer;
-  }
+.center-links {
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  align-items: center;
+  font-size: 2rem;
+  gap: 4rem;
+}
 
-  .left-links {
-    display: flex;
-    align-items: center;
-    flex: 1; /* Pushes center links to the center */
-  }
-  
-  .center-links {
-    position: absolute;
-    left: 50%;
-    transform: translateX(-50%);
-    display: flex;
-    align-items: center;
-    font-size: 2rem;
-    gap: 4rem; /* Space between each link */
-  }
-  
-  .right-links {
-    display: flex;
-    align-items: center;
-    flex: 1; /* Ensures right links stay on the right */
-    justify-content: flex-end;
-  }
-  
-  .styled-link {
-    color: white;
-    text-decoration: none;
-    font-weight: 600;
-    transition: color 0.3s ease-in-out; /* Smooth color transition */
+.right-links {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  width: auto;
+  flex: none;
+}
 
-    /* z-index: 2; */
-  }
+.styled-link {
+  color: white;
+  text-decoration: none;
+  font-weight: 600;
+  transition: color 0.3s ease-in-out;
+}
 
-  .styled-profile-link {
-    color: white;
-    text-decoration: none;
-    transition: color 0.3s ease-in-out; /* Smooth color transition */
-    /* z-index: 2; */
-  }
+.styled-profile-link {
+  color: white;
+  text-decoration: none;
+  transition: color 0.3s ease-in-out;
+}
 
-  
-  .styled-link:hover {
-    color: #f3e2f3;
-  }
+.styled-link:hover {
+  color: #f3e2f3;
+}
 
+.logout-text {
+  font-size: 1.5rem;
+}
 
-/* Responsive adjustments */
 @media (max-width: 768px) {
   header {
-    flex-direction: column; /* Stack header elements vertically */
+    flex-direction: column;
     align-items: center;
-    padding: 10px 5%; /* Adjust padding */
+    padding: 10px 5%;
   }
 
   .center-links {
-    position: static; /* Remove absolute positioning */
-    transform: none; /* No transform required */
-    gap: 2rem; /* Smaller gap */
+    position: static;
+    transform: none;
+    gap: 2rem;
     margin-top: 10px;
   }
 
   .logo {
-    font-size: 1.8rem; /* Smaller logo font size */
+    font-size: 1.8rem;
   }
 
   .profile-icon {
-    font-size: 1.8rem; /* Adjust profile icon size */
+    font-size: 1.8rem;
   }
 }
 
 @media (max-width: 480px) {
   header {
-    padding: 8px 5%; /* Further reduce padding for smaller screens */
+    padding: 8px 5%;
   }
 
   .logo {
-    font-size: 1.2rem; /* Even smaller font size for very small screens */
+    font-size: 1.2rem;
   }
 
   .center-links {
-    font-size: 1rem; /* Adjust font size for links */
-    gap: 1rem; /* Reduce gap */
+    font-size: 1rem;
+    gap: 1rem;
   }
 
   .styled-link {
-    font-size: 0.9rem; /* Adjust link font size */
+    font-size: 0.9rem;
   }
 }
-  
-  .logged-purple-overlay {
-    position: absolute;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    background-color: var(--overlay-color); /* Adjust alpha for transparency */
-    z-index: 1; /* Ensures it sits above the background but below content */
-  }
-  
-  .logged-header-container {
-    background-color: transparent;
-  }
-  
+
+.logged-purple-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: var(--overlay-color);
+  z-index: 1;
+}
+
+.logged-header-container {
+  background-color: transparent;
+  width: 100%;
+}

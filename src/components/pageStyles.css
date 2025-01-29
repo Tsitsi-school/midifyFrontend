@@ -1,14 +1,3 @@
-/* :root {
-    --history-background-color: #f9f9f9;
-    --text-color: #333;
-    --title-color: #000;
-    --history-item-color: #fff;
-    --list-item-border-color: #ccc;
-    --upload-button-bg: #007bff;
-    --upload-button-text: #fff;
-  } */
-
-
 /* Light theme  for upload page*/
 :root {
     --background-color: #f0f2f5;
@@ -16,22 +5,21 @@
     --drop-text-color: black;
     --description-color: black;
     --title-color: #000000;
-    --upload-button-bg: #3795BD;
+    --upload-button-bg: #3795bd;
     --upload-button-text: #ffffff;
-    --upload-container-bg: #E8E8E8;
+    --upload-container-bg: #e8e8e8;
     --upload-border-color: #b2b2b2;
-    --divider-color: #3795BD;
+    --divider-color: #3795bd;
     --file-info-color: black;
     --file-container-background-color: white;
     --file-container-border-color: black;
-    --spinner-color-darker: #4E31AA;
+    --spinner-color-darker: #4e31aa;
     --spinner-color-lighter: #4d31aa50;
-    --history-background-color: #F7F7F8;
+    --history-background-color: #f7f7f8;
     --history-item-color: white;
     --list-item-border-color: black;
     --login-container-bg: rgba(0, 0, 0, 0.39);
     --overlay-color: rgba(206, 204, 212, 0.7);
-
 }
 
 /* Dark theme */
@@ -41,48 +29,41 @@
     --drop-text-color: white;
     --description-color: white;
     --title-color: #ffffff;
-    --upload-button-bg: #4E31AA;
+    --upload-button-bg: #4e31aa;
     --upload-button-text: #ffffff;
     --upload-container-bg: #1b1b1b;
     --upload-border-color: #b2b2b2;
-    --divider-color: #4E31AA;
+    --divider-color: #4e31aa;
     --file-info-color: white;
     --file-container-background-color: black;
     --file-container-border-color: white;
-    --spinner-color-darker: #3795BD;
+    --spinner-color-darker: #3795bd;
     --spinner-color-lighter: #3795bd50;
     --history-background-color: black;
     --history-item-color: black;
     --list-item-border-color: white;
     --login-container-bg: #4f4753ba;
-    --overlay-color: rgba(78, 49, 170, 0.7); /* Example overlay color */
-
-
+    --overlay-color: rgba(78, 49, 170, 0.7);
 }
 
-body, html {
+body,
+html {
     margin: 0;
     padding: 0;
     height: 100%;
-    background-color: var(--background-color); /* Background image for the default landing */
-
-    /* overflow: hidden;  */
-
+    background-color: var(--background-color);
 }
 
 .page-content {
-    flex: 1 1 auto; /* Content takes remaining space */
-    overflow-y: auto; /* Ensure content is scrollable */
+    flex: 1 1 auto;
+    overflow-y: auto;
     height: 100%;
-    /* padding-top: 30; */
     margin-top: 120px;
-
 }
 
 .app-container {
-    /* display: grid; */
     grid-template-rows: auto 1fr;
-    height: 100%; /* Full viewport height */
+    height: 100%;
     width: 100%;
     display: flex;
     flex-direction: column;
@@ -92,16 +73,14 @@ body, html {
     background-color: var(--background-color);
     color: var(--text-color);
     height: 100%;
-    /* margin-top: 120px; */
     flex-direction: column;
     display: flex;
     align-items: center;
     padding: 10px;
 }
 
-
 .logged-purple-overlay {
-    --overlay-color: rgba(78, 49, 170, 0.7); /* Example overlay color */
+    --overlay-color: rgba(78, 49, 170, 0.7);
     z-index: 2;
 }
 
@@ -115,10 +94,9 @@ body, html {
 
 .history-list {
     width: 90%;
-    /* max-width: 900px;  */
     display: flex;
     flex-direction: column;
-    gap: 5px; /* Space between each history item */
+    gap: 5px;
 }
 
 .history-item {
@@ -140,32 +118,30 @@ body, html {
 
 .history-file-info {
     display: flex;
-    flex-wrap: wrap; /* Ensure children wrap to the next line if needed */
-    gap: 10px; /* Space between children */
-    align-items: center; /* Vertically center the children */
-    width: 100%; /*Take full width of the parent */
+    flex-wrap: wrap;
+    gap: 10px;
+    align-items: center;
+    width: 100%;
     flex-grow: 1;
 }
 
 .history-file-name {
     font-size: 1rem;
     color: var(--text-color);
-    white-space: nowrap; /* Prevent text from wrapping */
-    overflow: hidden; /* Hide overflowing text */
-    text-overflow: ellipsis; /* Add "..." for long text */
-    max-width: 60%; /* Constrain the file name's width */
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    max-width: 60%;
 }
 
 .history-file-date {
     font-size: 0.9rem;
     color: var(--text-color);
-    /* padding-left: 70%; */
     flex: 1;
     margin-right: 20px;
     white-space: nowrap;
     text-align: right;
 }
-
 
 .history-download-button {
     padding: 10px 20px;
@@ -199,7 +175,6 @@ body, html {
         align-self: flex-end;
     }
 }
-
 
 .about-page-container {
     background-color: var(--background-color);
@@ -247,7 +222,6 @@ body, html {
     text-align: justify;
     width: 100%;
 }
-
 
 .profile-page-container {
     background-color: var(--background-color);
@@ -307,7 +281,7 @@ body, html {
     width: 100%;
     padding: 10px;
     margin-top: 10px;
-    border: 1px solid #ccc;
+    border: 1px solid #c9c9c9;
     border-radius: 5px;
     font-size: 1rem;
     color: var(--text-color);
@@ -315,7 +289,8 @@ body, html {
 }
 
 .profile-form-field:disabled {
-    background-color: gray;
+    background-color: rgb(174, 174, 174);
+    color: white;
 }
 
 .profile-form-field[editable="true"] {
@@ -324,30 +299,6 @@ body, html {
 }
 
 .profile-form-field:focus[editable="true"] {
-    outline: 2px solid var(--upload-button-bg);
-}
-
-.profile-form-field-select {
-    width: 100%;
-    padding: 10px;
-    margin-top: 10px;
-    border: 1px solid #ccc;
-    border-radius: 5px;
-    font-size: 1rem;
-    color: var(--text-color);
-    background-color: var(--upload-container-bg);
-}
-
-.profile-form-field-select:disabled {
-    background-color: gray;
-}
-
-.profile-form-field-select[editable="true"] {
-    background-color: white;
-    cursor: pointer;
-}
-
-.profile-form-field-select:focus[editable="true"] {
     outline: 2px solid var(--upload-button-bg);
 }
 
@@ -375,11 +326,6 @@ profile-edit-button:hover {
     align-items: center;
     justify-content: center;
     margin-bottom: 50px;
-    /* position: fixed; */
-}
-
-.upload-centered-content {
-    /* Styles for the centered content can be added here */
 }
 
 .upload-convert-button {
@@ -390,7 +336,7 @@ profile-edit-button:hover {
     border-radius: 8px;
     cursor: pointer;
     font-size: 1rem;
-    font-family: 'DM Sans', sans-serif;
+    font-family: "DM Sans", sans-serif;
     margin-top: 20px;
     transition: background 0.3s ease;
     display: block;
@@ -411,23 +357,24 @@ profile-edit-button:hover {
 }
 
 .image-preview {
-    max-height: 1000px; /* Adjust to your preferred size */
+    max-height: 1000px;
     width: auto;
     height: auto;
     margin-bottom: 20px;
-    border: 2px solid #ddd; /* Optional border for aesthetics */
-    border-radius: 8px; /* Optional rounded corners */
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Optional shadow for better visual effect */
+    border: 2px solid #ddd;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
 
     @media (max-width: 768px) {
-        max-height: 300px; /* Smaller max height for smaller screens */
+        max-height: 300px;
     }
 }
 
 .default-fullscreen-container {
-    height: 100vh; /* Full screen height */
-    width: 100vw; /* Full screen width */
-    background-image: url('../../public/background.png'); /* Background image for the default landing */
+    padding-top: 2%;
+    height: 100vh;
+    width: 100vw;
+    background-image: url("../../public/background.png");
     background-size: cover;
     background-position: center;
     background-repeat: no-repeat;
@@ -521,6 +468,12 @@ profile-edit-button:hover {
     &:hover {
         background-color: #1a5cad;
     }
+
+    &:disabled {
+        background-color: #d3d3d3; /* Light gray for disabled state */
+        cursor: not-allowed; /* Show "not-allowed" cursor */
+        color: #9e9e9e; /* Muted text color */
+    }
 }
 
 .player-container {
@@ -573,7 +526,7 @@ profile-edit-button:hover {
     }
 
     .ReactPiano__Key--active {
-        background-color: #3795BD;
+        background-color: #3795bd;
     }
 }
 
@@ -583,7 +536,7 @@ profile-edit-button:hover {
     background-color: #fff;
     border-radius: 10px;
     overflow: hidden;
-    position: relative; /* Add this for positioning */
+    position: relative;
 
     .progress {
         height: 100%;
@@ -620,8 +573,8 @@ profile-edit-button:hover {
     display: flex;
     flex-direction: column;
     margin: 20px 0;
-    align-items: center; /* Align inputs and labels vertically */
-    justify-content: center; /* Adjust alignment to start */
+    align-items: center;
+    justify-content: center;
 }
 
 .label-metrics {
@@ -645,21 +598,20 @@ audio {
 }
 
 .audio-player-container {
-    margin-top: 20px; /* Add space between the download container and audio player */
-    text-align: center; /* Center the audio player */
+    margin-top: 20px;
+    text-align: center;
 }
 
 .audio-player-container h3 {
-    margin-bottom: 10px; /* Add some space below the heading */
+    margin-bottom: 10px;
     font-size: 1.5rem;
     color: var(--text-color);
 }
 
 audio {
-    width: 100%; /* Make the audio player take up full width */
-    max-width: 400px; /* Set a max width for smaller screens */
+    width: 100%;
+    max-width: 400px;
 }
-
 
 .loading-container {
     display: flex;
@@ -670,7 +622,6 @@ audio {
     height: 100vh;
     background-color: var(--background-color);
 }
-
 
 .progress-bar-container {
     width: 80%;
@@ -708,7 +659,8 @@ audio {
 }
 
 @keyframes wave {
-    0%, 100% {
+    0%,
+    100% {
         transform: translateY(0);
     }
     50% {
@@ -717,7 +669,7 @@ audio {
 }
 
 .login-page-container {
-    background-image: url('../../public/background.png');
+    background-image: url("../../public/background.png");
     color: var(--text-color);
     min-height: 100vh;
     width: 100vw;
@@ -731,7 +683,7 @@ audio {
 }
 
 .login-container {
-    background-color: var(--login-container-bg);
+    background-color: rgba(0, 0, 0, 0.39);
     padding: 40px;
     border-radius: 10px;
     box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
@@ -802,16 +754,13 @@ audio {
 .login-footer {
     color: white;
     margin-top: 40px;
-    /*justify-self: flex-end;*/
-    /*align-self: flex-end;*/
 }
 
 .signup-link {
-    color: #3795BDFF;
+    color: #3795bdff;
     font-weight: bold;
 }
 
-/* Center the container */
 .history-page-container.no-history-container {
     display: flex;
     flex-direction: column;
@@ -819,11 +768,10 @@ audio {
     background-color: var(--history-background-color);
     align-items: center;
     color: var(--text-color);
-    height: 100vh; /* Adjust based on the layout */
+    height: 100vh;
     text-align: center;
 }
 
-/* No history content styling */
 .no-history-content {
     max-width: 500px;
     border-radius: 10px;
@@ -832,14 +780,12 @@ audio {
     box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
 }
 
-/* Icon styling */
 .no-history-icon {
     font-size: 10rem;
     color: var(--text-color-secondary);
     margin-bottom: 20px;
 }
 
-/* Message styling */
 .no-history-content h2 {
     font-size: 1.8rem;
     color: var(--text-color);
@@ -851,7 +797,6 @@ audio {
     color: var(--text-color-secondary);
     margin-bottom: 20px;
 }
-
 
 .switch {
     position: relative;

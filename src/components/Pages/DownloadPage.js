@@ -1,5 +1,4 @@
 /* global verovio */
-
 import React, {useRef, useEffect, useState} from "react";
 import InsertDriveFileOutlinedIcon from "@mui/icons-material/InsertDriveFileOutlined";
 import FileDownloadOutlinedIcon from "@mui/icons-material/FileDownloadOutlined";
@@ -9,14 +8,14 @@ import apiClient from "../../api/midifyApi";
 import Soundfont from "soundfont-player";
 import {Midi} from "@tonejs/midi";
 import {Piano, MidiNumbers} from "react-piano";
-import '../pageStyles.css';
+import "../pageStyles.css";
 import "react-piano/dist/styles.css";
 
 const ProgressBarWrapper = ({currentTime, duration, onProgressClick}) => {
     const handleClick = (event) => {
         const rect = event.target.getBoundingClientRect();
-        const clickPosition = event.clientX - rect.left; // Click position relative to the progress bar
-        const newTime = (clickPosition / rect.width) * duration; // Calculate the new time
+        const clickPosition = event.clientX - rect.left;
+        const newTime = (clickPosition / rect.width) * duration;
         onProgressClick(newTime);
     };
 
@@ -30,20 +29,37 @@ const ProgressBarWrapper = ({currentTime, duration, onProgressClick}) => {
     );
 };
 
-
 const DownloadPage = ({fileID, fileName, files, onDownload}) => {
     const [vrvToolkit, setVrvToolkit] = useState(null);
-    const [meiDataList, setMeiDataList] = useState([]); // To store MEI data for all files
+    const [meiDataList, setMeiDataList] = useState([]);
     const [error, setError] = useState("");
-    const [midiBlob, setMidiBlob] = useState(null); // Store the MIDI blob
-    const [activeNotes, setActiveNotes] = useState([]); // Active notes for piano visualization
-    const [timeouts, setTimeouts] = useState([]); // Track all scheduled timeouts
-    const [playingNotes, setPlayingNotes] = useState([]); // Track active AudioNodes
-    const [isPlaying, setIsPlaying] = useState(false); // Playback status
-    const [currentTime, setCurrentTime] = useState(0); // Current playback time
-    const [duration, setDuration] = useState(0); // Total duration of the MIDI file
-    const progressIntervalRef = useRef(null); // Reference to the interval for progress updates
-    const containerRefs = useRef([]); // To store multiple container references for MEI data
+    const [midiBlob, setMidiBlob] = useState(null);
+    const [activeNotes, setActiveNotes] = useState([]);
+    const [timeouts, setTimeouts] = useState([]);
+    const [playingNotes, setPlayingNotes] = useState([]);
+    const [isPlaying, setIsPlaying] = useState(false);
+    const [currentTime, setCurrentTime] = useState(0);
+    const [duration, setDuration] = useState(0);
+    const progressIntervalRef = useRef(null);
+    const containerRefs = useRef([]);
+    const [isCooldown, setIsCooldown] = useState(false); // Cooldown state
+    const cooldownDelay = 500; // Delay in milliseconds (1 second)
+
+    const handleButtonClick = () => {
+        if (isCooldown) return; // Prevent spamming
+        setIsCooldown(true);
+
+        if (isPlaying) {
+            stopMidi();
+        } else {
+            playMidi();
+        }
+
+        // Reset cooldown after the delay
+        setTimeout(() => {
+            setIsCooldown(false);
+        }, cooldownDelay);
+    };
 
     const fetchMeiFiles = async () => {
         try {
@@ -60,7 +76,10 @@ const DownloadPage = ({fileID, fileName, files, onDownload}) => {
             const meiDataArray = meiDataResponses.map((response) => response.data);
             setMeiDataList(meiDataArray);
         } catch (error) {
-            console.error("Error fetching MEI files:", error.response?.data || error.message);
+            console.error(
+                "Error fetching MEI files:",
+                error.response?.data || error.message
+            );
             setError("Failed to fetch MEI files. Please try again.");
         }
     };
@@ -76,29 +95,36 @@ const DownloadPage = ({fileID, fileName, files, onDownload}) => {
             });
             setMidiBlob(response.data);
         } catch (error) {
-            console.error("Error fetching MIDI file:", error.response?.data || error.message);
+            console.error(
+                "Error fetching MIDI file:",
+                error.response?.data || error.message
+            );
             setError("Failed to fetch the MIDI file. Please try again.");
         }
     };
 
     const startPlaybackAtTime = async (startTime) => {
         if (!midiBlob) return;
-
-        stopMidi(); // Stop the current playback
+        stopMidi();
         setIsPlaying(true);
 
         try {
             const arrayBuffer = await midiBlob.arrayBuffer();
             const midi = new Midi(arrayBuffer);
 
-            const audioContext = new (window.AudioContext || window.webkitAudioContext)();
+            const audioContext = new (window.AudioContext ||
+                window.webkitAudioContext)();
             const gainNode = audioContext.createGain(); // Create a GainNode
             gainNode.gain.value = 5.0; // Increase the volume
             gainNode.connect(audioContext.destination);
 
-            const piano = await Soundfont.instrument(audioContext, "acoustic_grand_piano", {
-                destination: gainNode,
-            });
+            const piano = await Soundfont.instrument(
+                audioContext,
+                "acoustic_grand_piano",
+                {
+                    destination: gainNode,
+                }
+            );
 
             const newTimeouts = [];
             const newPlayingNotes = [];
@@ -106,11 +132,14 @@ const DownloadPage = ({fileID, fileName, files, onDownload}) => {
             midi.tracks.forEach((track) => {
                 track.notes.forEach((note) => {
                     if (note.time >= startTime) {
-                        const adjustedStartTime = audioContext.currentTime + (note.time - startTime);
+                        const adjustedStartTime =
+                            audioContext.currentTime + (note.time - startTime);
                         const endTime = adjustedStartTime + note.duration;
 
                         // Schedule playback
-                        const noteNode = piano.play(note.name, adjustedStartTime, {duration: note.duration});
+                        const noteNode = piano.play(note.name, adjustedStartTime, {
+                            duration: note.duration,
+                        });
                         newPlayingNotes.push(noteNode);
 
                         // Schedule note activation
@@ -168,14 +197,19 @@ const DownloadPage = ({fileID, fileName, files, onDownload}) => {
 
             setDuration(midi.duration); // Set the total duration of the MIDI file
 
-            const audioContext = new (window.AudioContext || window.webkitAudioContext)();
-            const gainNode = audioContext.createGain(); // Create a GainNode
-            gainNode.gain.value = 5.0; // Increase the volume (2.0 means double the normal volume)
-            gainNode.connect(audioContext.destination); // Connect the GainNode to the audio context
-
-            const piano = await Soundfont.instrument(audioContext, "acoustic_grand_piano", {
-                destination: gainNode, // Connect the instrument to the GainNode
-            });
+            const audioContext = new (window.AudioContext ||
+                window.webkitAudioContext)();
+            const gainNode = audioContext.createGain();
+            gainNode.gain.value = 5.0;
+            gainNode.connect(audioContext.destination);
+            // Connect the instrument to the GainNode
+            const piano = await Soundfont.instrument(
+                audioContext,
+                "acoustic_grand_piano",
+                {
+                    destination: gainNode,
+                }
+            );
 
             const newTimeouts = [];
             const newPlayingNotes = [];
@@ -184,9 +218,10 @@ const DownloadPage = ({fileID, fileName, files, onDownload}) => {
                 track.notes.forEach((note) => {
                     const startTime = audioContext.currentTime + note.time;
                     const endTime = startTime + note.duration;
-
                     // Schedule piano playback and track the AudioNode
-                    const noteNode = piano.play(note.name, startTime, {duration: note.duration});
+                    const noteNode = piano.play(note.name, startTime, {
+                        duration: note.duration,
+                    });
                     newPlayingNotes.push(noteNode);
 
                     // Schedule note activation
@@ -205,7 +240,7 @@ const DownloadPage = ({fileID, fileName, files, onDownload}) => {
                     const deactivateTimeout = setTimeout(() => {
                         setActiveNotes((prev) => {
                             const midiNumber = MidiNumbers.fromNote(note.name);
-                            return prev.filter((n) => n !== midiNumber); // Remove only the specific note
+                            return prev.filter((n) => n !== midiNumber);
                         });
                     }, endTime * 1000);
                     newTimeouts.push(deactivateTimeout);
@@ -220,9 +255,9 @@ const DownloadPage = ({fileID, fileName, files, onDownload}) => {
                 setCurrentTime((prevTime) => {
                     if (prevTime >= midi.duration) {
                         stopMidi();
-                        return midi.duration; // Ensure it doesn't exceed the total duration
+                        return midi.duration;
                     }
-                    return prevTime + 0.1; // Increment progress every 100ms
+                    return prevTime + 0.1;
                 });
             }, 100);
         } catch (err) {
@@ -233,7 +268,6 @@ const DownloadPage = ({fileID, fileName, files, onDownload}) => {
     };
 
     const stopMidi = () => {
-        // Clear all scheduled timeouts
         timeouts.forEach((timeout) => clearTimeout(timeout));
         setTimeouts([]);
 
@@ -241,7 +275,7 @@ const DownloadPage = ({fileID, fileName, files, onDownload}) => {
         playingNotes.forEach((noteNode) => noteNode.stop());
         setPlayingNotes([]);
 
-        setActiveNotes([]); // Clear active notes
+        setActiveNotes([]);
         setIsPlaying(false);
 
         // Stop the progress bar updates
@@ -251,7 +285,7 @@ const DownloadPage = ({fileID, fileName, files, onDownload}) => {
         }
 
         // Reset the progress bar
-        setCurrentTime(0); // Reset progress to the beginning
+        setCurrentTime(0);
     };
 
     useEffect(() => {
@@ -294,7 +328,6 @@ const DownloadPage = ({fileID, fileName, files, onDownload}) => {
         }
     };
 
-
     return (
         <div>
             <h1 className="download-title">Converted Files</h1>
@@ -311,16 +344,19 @@ const DownloadPage = ({fileID, fileName, files, onDownload}) => {
                 {error && <p style={{color: "red"}}>{error}</p>}
                 <div className="piano-container">
                     <Piano
-                        noteRange={{first: MidiNumbers.fromNote("A0"), last: MidiNumbers.fromNote("C8")}}
+                        noteRange={{
+                            first: MidiNumbers.fromNote("A0"),
+                            last: MidiNumbers.fromNote("C8"),
+                        }}
                         playNote={() => {
-                        }} // Disable manual play
+                        }}
                         stopNote={() => {
                         }}
-                        activeNotes={activeNotes} // Highlight active notes
+                        activeNotes={activeNotes}
                     />
                 </div>
                 <div className="player-container">
-                    <button className="icon-button" onClick={isPlaying ? stopMidi : playMidi}>
+                    <button className="icon-button" onClick={handleButtonClick} disabled={isCooldown}>
                         {isPlaying ? <StopIcon/> : <PlayArrowIcon/>}
                     </button>
                     <ProgressBarWrapper
